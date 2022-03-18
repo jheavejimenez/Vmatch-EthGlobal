@@ -2,7 +2,6 @@ import Head from 'next/head'
 import Header from './Header'
 import Hero from './Hero'
 import Footer from './Footer'
-import Team from './Team'
 import { ExternalLinkIcon } from '@heroicons/react/solid'
 
 export default function Login() {
@@ -41,7 +40,12 @@ export default function Login() {
                 Felix Prabitz & Dominic Hackett.
               </p>
               <div className="mt-8">
-                <div className="inline-flex rounded-md shadow">
+                <div
+                  className="inline-flex rounded-md shadow"
+                  onClick={() =>
+                    window.open('https://github.com/felixpx/Vmatch-EthGlobal')
+                  }
+                >
                   <a
                     href="#"
                     className="inline-flex items-center justify-center rounded-md border border-transparent bg-white px-5 py-3 text-base font-medium text-gray-900 hover:bg-gray-50"

@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/solid'
 import { useChain, useMoralis } from 'react-moralis'
+import Image from 'next/image'
 
 const navigation = [
   //   { name: 'Home', href: '#' },
@@ -83,7 +84,7 @@ export default function HeaderApp() {
                 ))}
               </div>
             </div>
-            <div className="hidden md:flex md:items-center md:space-x-6">
+            <div className="mr-8 hidden md:flex md:items-center md:space-x-6">
               {isAuthenticated && wrongNetwork ? (
                 <button
                   className="text-base font-medium text-red-500 hover:text-gray-300"
@@ -107,6 +108,12 @@ export default function HeaderApp() {
                 </button>
               )}
             </div>
+            <Image
+              src={'/fp.jpeg'}
+              height={35}
+              width={35}
+              className="z-50 rounded-full"
+            />
           </nav>
         </div>
 
