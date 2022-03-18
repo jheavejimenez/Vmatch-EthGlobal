@@ -1,6 +1,12 @@
 import { ChevronRightIcon } from '@heroicons/react/solid'
+import { useMoralis } from 'react-moralis'
 
 export default function Hero() {
+  const { authenticate } = useMoralis()
+
+  function handleClick() {
+    authenticate()
+  }
   return (
     <main className="w-full">
       <div className="mt-4 bg-gray-900 pt-10 sm:pt-16 lg:overflow-hidden lg:pt-8 lg:pb-14">
@@ -48,8 +54,8 @@ export default function Hero() {
                           </div> */}
                       <div className="mt-3 sm:mt-0">
                         <button
-                          type="submit"
                           className="block w-full rounded-md bg-gradient-to-r from-teal-500 to-cyan-600 py-3 px-4 font-medium text-white shadow hover:from-teal-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+                          onClick={handleClick}
                         >
                           Launch App
                         </button>

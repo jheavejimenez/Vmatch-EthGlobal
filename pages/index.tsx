@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useMoralis } from 'react-moralis'
 import Header from '../src/components/Login/Header'
 import Login from '../src/components/Login/Index'
+import HeaderApp from '../src/components/Main/HeaderApp'
 
 const Home: NextPage = () => {
   const { isAuthenticated } = useMoralis()
@@ -16,7 +17,7 @@ const Home: NextPage = () => {
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
+      <HeaderApp />
     </div>
   )
 }
