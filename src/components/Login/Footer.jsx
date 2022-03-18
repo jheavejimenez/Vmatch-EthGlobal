@@ -1,26 +1,26 @@
 const footerNavigation = {
   solutions: [
-    { name: 'Marketing', href: '#' },
-    //   { name: 'Analytics', href: '#' },
-    //   { name: 'Commerce', href: '#' },
-    //   { name: 'Insights', href: '#' },
+    { name: 'LiveChat', href: '#' },
+    { name: 'Content Monetization', href: '#' },
+    { name: 'Matchmaking', href: '#' },
+    { name: 'Insights', href: '#' },
   ],
   support: [
-    //   { name: 'Pricing', href: '#' },
+    { name: 'Pricing', href: '#' },
     { name: 'Documentation', href: '#' },
-    //   { name: 'Guides', href: '#' },
-    //   { name: 'API Status', href: '#' },
+    { name: 'Guides', href: '#' },
+    { name: 'API Status', href: '#' },
   ],
   company: [
     { name: 'About', href: '#' },
-    //   { name: 'Blog', href: '#' },
-    //   { name: 'Jobs', href: '#' },
-    //   { name: 'Press', href: '#' },
-    //   { name: 'Partners', href: '#' },
+    { name: 'Blog', href: '#' },
+    { name: 'Jobs', href: '#' },
+    { name: 'Press', href: '#' },
+    { name: 'Partners', href: '#' },
   ],
   legal: [
-    //   { name: 'Claim', href: '#' },
-    //   { name: 'Privacy', href: '#' },
+    { name: 'Claim', href: '#' },
+    { name: 'Privacy', href: '#' },
     { name: 'Terms', href: '#' },
   ],
   social: [
@@ -98,13 +98,13 @@ export default function Footer() {
         <div className="mx-auto max-w-md px-4 pt-12 sm:max-w-7xl sm:px-6 lg:px-8 lg:pt-16">
           <div className="xl:grid xl:grid-cols-3 xl:gap-8">
             <div className="space-y-8 xl:col-span-1">
-              {/* <img
-                  className="h-10"
-                  src="https://tailwindui.com/img/logos/workflow-mark-gray-300.svg"
-                  alt="Company name"
-                /> */}
+              <img
+                className="h-10"
+                src="https://tailwindui.com/img/logos/workflow-mark-gray-300.svg"
+                alt="Company name"
+              />
               <p className="text-base text-gray-500">
-                Dating with onChain verification.
+                The new way to experience Social Media & Online Dating.
               </p>
               <div className="flex space-x-6">
                 {footerNavigation.social.map((item) => (
@@ -121,18 +121,23 @@ export default function Footer() {
             </div>
             <div className="mt-12 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
               <div className="md:grid md:grid-cols-2 md:gap-8">
-                {/* <div>
-                    <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Solutions</h3>
-                    <ul role="list" className="mt-4 space-y-4">
-                      {footerNavigation.solutions.map((item) => (
-                        <li key={item.name}>
-                          <a href={item.href} className="text-base text-gray-500 hover:text-gray-900">
-                            {item.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div> */}
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
+                    Solutions
+                  </h3>
+                  <ul role="list" className="mt-4 space-y-4">
+                    {footerNavigation.solutions.map((item) => (
+                      <li key={item.name}>
+                        <a
+                          href={item.href}
+                          className="text-base text-gray-500 hover:text-gray-900"
+                        >
+                          {item.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
                 <div className="mt-12 md:mt-0">
                   <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
                     Support

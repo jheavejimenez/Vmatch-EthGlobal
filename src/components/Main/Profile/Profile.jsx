@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import Dashboard from './Dashboard'
-import Liveticker from './Liveticker'
+import Dashboard from '../Fixed/Dashboard'
+import Liveticker from '../Newsfeed/Liveticker'
 import Test from '../../Test/Test'
 
 import { ExternalLinkIcon } from '@heroicons/react/solid'

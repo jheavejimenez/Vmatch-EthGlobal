@@ -27,7 +27,7 @@ export default function Hero() {
                 <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
                   <span className="block">VMATCH</span>
                   <span className="block bg-gradient-to-r from-teal-200 to-cyan-400 bg-clip-text pb-3 text-transparent sm:pb-5">
-                    dating app with onchain verification.
+                    A new experience for Social Media & Online Dating.
                   </span>
                 </h1>
                 <div className="flex flex-col">
@@ -36,6 +36,9 @@ export default function Hero() {
                   </p>
                   <p className="text-base text-gray-300 sm:text-xl lg:text-lg xl:text-xl">
                     Verification Tag NFT via Lens Protocol.
+                  </p>
+                  <p className="text-base text-gray-300 sm:text-xl lg:text-lg xl:text-xl">
+                    Social Media Content Monetization via Polygon.
                   </p>
                 </div>
                 <div className="mt-10 sm:mt-12">

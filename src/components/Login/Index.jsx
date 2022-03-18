@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Header from './Header'
 import Hero from './Hero'
 import Footer from './Footer'
+import Feature from './Feature'
 import { ExternalLinkIcon } from '@heroicons/react/solid'
 
 export default function Login() {
@@ -62,6 +63,7 @@ export default function Login() {
           </div>
         </div>
       </div>
+      <Feature />
       <Footer />
     </div>
   )

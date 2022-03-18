@@ -3,8 +3,8 @@ import Head from 'next/head'
 import { useEffect } from 'react'
 import { useMoralis } from 'react-moralis'
 import Login from '../src/components/Login/Index'
-import HeaderApp from '../src/components/Main/Topend/HeaderApp'
-import MainApp from '../src/components/Main/App/Index'
+import HeaderApp from '../src/components/Main/Fixed/HeaderApp'
+import MainApp from '../src/components/Main/Newsfeed/Index'
 
 const Home: NextPage = () => {
   const { isAuthenticated } = useMoralis()

@@ -6,9 +6,9 @@ import Image from 'next/image'
 
 const navigation = [
   //   { name: 'Home', href: '#' },
-  { name: 'Explore', href: '#' },
-  { name: 'Profile', href: '#' },
-  { name: 'Verify', href: '#' },
+  // { name: 'Explore', href: '#' },
+  // { name: 'Profile', href: '#' },
+  // { name: 'Verify', href: '#' },
 ]
 
 export default function HeaderApp() {
@@ -52,7 +52,7 @@ export default function HeaderApp() {
       <Popover as="header" className="relative">
         <div className="bg-gray-900 py-6 shadow-xl">
           <nav
-            className="relative mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6"
+            className="relative mx-auto flex items-center justify-between px-4 sm:px-6"
             aria-label="Global"
           >
             <div className="flex flex-1 items-center">
@@ -72,6 +72,11 @@ export default function HeaderApp() {
                   </Popover.Button>
                 </div>
               </div>
+              <img
+                className="mr-8 h-8 w-auto"
+                src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
+                alt="Workflow"
+              />
               <div className="hidden space-x-8 md:ml-10 md:flex">
                 {navigation.map((item) => (
                   <a
