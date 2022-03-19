@@ -48,7 +48,7 @@ export default function HeaderApp() {
   }
 
   return (
-    <div className="fixed top-0 w-full pb-4">
+    <div className="fixed top-0 z-50 w-full pb-4">
       <Popover as="header" className="relative">
         <div className="bg-gray-900 py-6 shadow-xl">
           <nav

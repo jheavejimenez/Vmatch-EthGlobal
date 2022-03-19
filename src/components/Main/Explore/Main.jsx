@@ -68,10 +68,7 @@ const comments = [
 
 export default function Main() {
   return (
-    <div className="flex w-full flex-col items-center space-y-6 overflow-y-scroll lg:col-span-2 lg:col-start-1">
-      <Contentpost />
-      <Contentpost />
-      <Contentpost />
+    <div className="relative flex w-full flex-col items-center justify-center space-y-6 overflow-y-scroll lg:col-span-2 lg:col-start-1">
       <Contentpost />
       <Contentpost />
       <Contentpost />

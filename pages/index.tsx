@@ -1,10 +1,9 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useEffect } from 'react'
 import { useMoralis } from 'react-moralis'
 import Login from '../src/components/Login/Index'
 import HeaderApp from '../src/components/Main/Fixed/HeaderApp'
-import MainApp from '../src/components/Main/Newsfeed/Index'
+import MainApp from '../src/components/Main/Explore/Index'
 
 const Home: NextPage = () => {
   const { isAuthenticated } = useMoralis()
@@ -18,9 +17,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <HeaderApp />
-      <div className="flex-1">
-        <MainApp />
-      </div>
+      <MainApp />
     </div>
   )
 }

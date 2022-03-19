@@ -6,8 +6,8 @@ import {
 } from '@heroicons/react/outline'
 
 const navigation = [
-  { name: 'News Feed', icon: GlobeAltIcon, href: 'profile', current: false },
-  { name: 'Matching', icon: UsersIcon, href: '#', current: false },
+  { name: 'Explore', icon: GlobeAltIcon, href: '/', current: false },
+  { name: 'Matching', icon: UsersIcon, href: '#', count: '!', current: false },
   { name: 'Profile', icon: UserIcon, href: 'profile', current: false },
   { name: 'Messages', icon: InboxIcon, href: '#', current: false },
 ]
