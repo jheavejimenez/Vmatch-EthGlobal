@@ -15,9 +15,9 @@ const Home: NextPage = () => {
 
   if (user) {
     const handle = user.get('handle')
-    if (handle == undefined) {
+    if (handle != user.get('username')) {
       router.push('profile')
-    }
+    } else router.push('/')
   }
 
   return (

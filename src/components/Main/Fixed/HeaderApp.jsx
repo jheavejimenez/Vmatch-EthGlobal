@@ -3,6 +3,7 @@ import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/solid'
 import { useChain, useMoralis } from 'react-moralis'
 import Image from 'next/image'
+import { userInfo } from 'os'
 
 const navigation = [
   //   { name: 'Home', href: '#' },
@@ -20,6 +21,7 @@ export default function HeaderApp() {
     logout,
     enableWeb3,
     isWeb3Enabled,
+    user,
   } = useMoralis()
 
   const [wrongNetwork, setWrongNetwork] = useState('')
@@ -114,7 +116,7 @@ export default function HeaderApp() {
               )}
             </div>
             <Image
-              src={'/fp.jpeg'}
+              src={user.get('profileImg')}
               height={35}
               width={35}
               className="z-50 rounded-full"
