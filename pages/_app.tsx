@@ -3,8 +3,8 @@ import type { AppProps } from 'next/app'
 import { MoralisProvider } from 'react-moralis'
 import { MoralisDappProvider } from '../src/providers/MoralisDappProvider/MoralisDappProvider'
 
-const APP_ID = 'wP72LBrtYNByCuvqcXnGZHuwQv6EBNQSUOpgjwio'
-const SERVER_URL = 'https://wacyebyvksfw.usemoralis.com:2053/server'
+const APP_ID = '1ht4NfH7fR5hWU1FxXZZn3GajY6x3EuidxfxJ4yi'
+const SERVER_URL = 'https://a207aatxvwxo.usemoralis.com:2053/server'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const isServerInfo = APP_ID && SERVER_URL ? true : false
