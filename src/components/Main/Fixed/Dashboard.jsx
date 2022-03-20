@@ -3,13 +3,26 @@ import {
   InboxIcon,
   UserIcon,
   UsersIcon,
+  VideoCameraIcon,
 } from '@heroicons/react/outline'
 
 const navigation = [
   { name: 'Explore', icon: GlobeAltIcon, href: '/', current: false },
-  { name: 'Matching', icon: UsersIcon, href: '#', count: '!', current: false },
+  {
+    name: 'Matching',
+    icon: UsersIcon,
+    href: 'matching',
+    count: '!',
+    current: false,
+  },
+  {
+    name: 'Videochat',
+    icon: VideoCameraIcon,
+    href: 'videochat',
+    current: false,
+  },
   { name: 'Profile', icon: UserIcon, href: 'profile', current: false },
-  { name: 'Messages', icon: InboxIcon, href: '#', current: false },
+  { name: 'Messages', icon: InboxIcon, href: 'messages', current: false },
 ]
 
 function classNames(...classes) {

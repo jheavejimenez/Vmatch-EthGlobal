@@ -1,4 +1,8 @@
-export default function TestForm(editModal) {
+export default function TestForm(props) {
+  function closeModal() {
+    props.handleEdit(false)
+  }
+
   return (
     <form className="mt-24 space-y-6 divide-y divide-gray-200">
       <div className="space-y-6 divide-y divide-gray-200">
@@ -223,6 +227,26 @@ export default function TestForm(editModal) {
                 </select>
               </div>
             </div>
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="country"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Pronouns
+              </label>
+              <div className="mt-1">
+                <select
+                  id="country"
+                  name="country"
+                  autoComplete="country-name"
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                >
+                  <option>She / Her</option>
+                  <option>He / Him</option>
+                  <option>They / Them</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -232,7 +256,7 @@ export default function TestForm(editModal) {
           <button
             type="button"
             className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            onClick={() => editModal(false)}
+            onClick={closeModal}
           >
             Cancel
           </button>

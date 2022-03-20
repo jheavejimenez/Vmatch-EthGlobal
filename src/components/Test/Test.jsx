@@ -363,7 +363,7 @@ export default function Example() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <div className="relative z-0 flex flex-1 overflow-hidden">
             <main className="relative flex-1 overflow-y-auto focus:outline-none xl:order-last">
-              {editModal && <TestForm setEditModal={setEditModal} />}
+              {editModal && <TestForm handleEdit={handleEdit} />}
               {/* {editModal && (
                 <div className="absolute z-50 flex h-5/6 w-full flex-col items-center justify-center rounded-xl bg-gray-800 bg-opacity-90 shadow">
                   <h1>Edit Profile Info</h1>
