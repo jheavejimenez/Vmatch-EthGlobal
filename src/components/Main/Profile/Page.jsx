@@ -30,10 +30,10 @@ import {
 import { useMoralis } from 'react-moralis'
 import { useRouter } from 'next/router'
 import ProfileForm from './ProfileForm'
+import PersonalInfo from './PersonalInfo'
 
 const tabs = [
   { name: 'Profile', href: '#', current: true },
-  { name: 'Images', href: '#', current: false },
   { name: 'Content', href: '#', current: false },
 ]
 const profile = {
@@ -47,9 +47,9 @@ const profile = {
     <p>Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.</p>
   `,
   fields: {
-    Pronouns: 'He Him',
+    Name: 'He Him',
     Email: 'gmail.com',
-    Birthday: 'June 8, 1990',
+    Pronouns: 'June 8, 1990',
     Interest: 'InterestedIn',
     Job: 'Product Development',
     Location: 'location',
@@ -69,6 +69,40 @@ export default function Page() {
 
   const [matched, setMatched] = useState()
   const [editModal, setEditModal] = useState()
+
+  const [profile, setProfile] = useState({
+    name: '',
+    imageUrl: '',
+    coverImageUrl: '',
+    about: '',
+    fields: {
+      Name: '',
+      Email: '',
+      Pronouns: '',
+      Interest: '',
+      Location: '',
+    },
+  })
+
+  useEffect(() => {
+    if (user) {
+      setProfile({
+        name: user.get('username'),
+        imageUrl: user.get('profileImg'),
+        coverImageUrl: user.get('coverImg'),
+        about: user.get('userbio'),
+        fields: {
+          Name: user.get('firstName') + ' ' + user.get('lastName'),
+          Email: user.get('email'),
+          Pronouns: user.get('Pronouns').get('Pronouns'),
+          Interest: user.get('InterestedIn').get('InterestedIn'),
+          Location: user.get('location'),
+          // Phone: '(555) 123-4567',
+          // Salary: '$145,000',
+        },
+      })
+    }
+  }, [])
 
   function handleMatch() {
     if (matched) {
@@ -116,30 +150,6 @@ export default function Page() {
           <div className="relative z-0 flex flex-1 overflow-hidden">
             <main className="relative flex-1 overflow-y-auto focus:outline-none xl:order-last">
               {editModal && <ProfileForm handleEdit={handleEdit} />}
-              {/* {editModal && (
-                <div className="absolute z-50 flex h-5/6 w-full flex-col items-center justify-center rounded-xl bg-gray-800 bg-opacity-90 shadow">
-                  <h1>Edit Profile Info</h1>
-                  <input placeholder="Full Name" type="text" id="name" />
-                  <input placeholder="Birthday" type="date" id="birthday" />
-                  <input placeholder="Location" type="text" id="location" />
-                  <input placeholder="Job" type="text" id="job" />
-                  <input
-                    placeholder="Interested in"
-                    type="text"
-                    id="interest"
-                  />
-                  <textarea placeholder="Bio" type="text" id="bio" />
-                  <input placeholder="Profile Picture" type="file" id="image" />
-                  <button onClick={saveInfo}>Save</button>
-                  <button
-                    onClick={() => {
-                      setEditModal(false)
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              )} */}
               {!editModal && (
                 <article className="mt-18">
                   {/* Profile header */}
@@ -215,11 +225,11 @@ export default function Page() {
                           </div>
                         </div>
                       </div>
-                      <div className="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
+                      {/* <div className="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
                         <h1 className="truncate text-2xl font-bold text-gray-900">
                           {profile.name}
                         </h1>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
 
@@ -253,36 +263,7 @@ export default function Page() {
 
                   {/* Description list */}
                   <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex w-full flex-col items-center ">
-                      <div className="flex w-full flex-row items-center">
-                        <div className="flex-col">
-                          <p>Name</p>
-                          <div className="flex flex-row space-x-2">
-                            <p>{user.get('firstName')}</p>
-                            <p>{user.get('lastName')}</p>
-                          </div>
-                        </div>
-                        <div className="flex-col">
-                          <p>Twitter</p>
-                          <div className="flex flex-row space-x-2">
-                            <p>{user.get('firstName')}</p>
-                            <p>{user.get('lastName')}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex w-full flex-row items-center">
-                        <div className="flex-col">
-                          <p>Email</p>
-                          <p>{user.get('email')}</p>
-                        </div>
-
-                        <div className="flex-col">
-                          <p>Location</p>
-                          <p>{user.get('location')}</p>
-                        </div>
-                      </div>
-                    </div>
-                    {/* <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                    <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                       {Object.keys(profile.fields).map((field) => (
                         <div key={field} className="sm:col-span-1">
                           <dt className="text-sm font-medium text-gray-500">
@@ -295,52 +276,59 @@ export default function Page() {
                       ))}
                       <div className="sm:col-span-2">
                         <dt className="text-sm font-medium text-gray-500">
-                          Biography
+                          About
                         </dt>
                         <dd
                           className="mt-1 max-w-prose space-y-5 text-sm text-gray-900"
-                          dangerouslySetInnerHTML={{
-                            __html: user.get('userbio'),
-                          }}
+                          dangerouslySetInnerHTML={{ __html: profile.about }}
                         />
                       </div>
-                    </dl> */}
+                    </dl>
                   </div>
 
-                  {/* Team member list */}
-                  {/* <div className="mx-auto mt-8 max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
-                    <h2 className="text-sm font-medium text-gray-500">
-                      Verified by
-                    </h2>
-                    <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      {team.map((person) => (
-                        <div
-                          key={person.handle}
-                          className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-pink-500 focus-within:ring-offset-2 hover:border-gray-400"
-                        >
-                          <div className="flex-shrink-0">
-                            <img
-                              className="h-10 w-10 rounded-full"
-                              src={person.imageUrl}
-                              alt=""
-                            />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <a href="#" className="focus:outline-none">
-                              <span
-                                className="absolute inset-0"
-                                aria-hidden="true"
-                              />
-                              <p className="text-sm font-medium text-gray-900">
-                                {person.name}
-                              </p>
-                              <p className="truncate text-sm text-gray-500">
-                                {person.role}
-                              </p>
-                            </a>
-                          </div>
-                        </div>
-                      ))}
+                  {/* <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
+                    <div className="flex w-full flex-col items-center ">
+                      <div className="flex w-11/12 flex-row items-center justify-between">
+                        <PersonalInfo
+                          title={'Name'}
+                          info={
+                            user.get('firstName') + ' ' + user.get('lastName')
+                          }
+                        />
+                        <PersonalInfo
+                          title={'Pronouns'}
+                          info={user.get('Pronouns').get('Pronouns')}
+                        />
+                      </div>
+                      <div className="flex w-11/12 flex-row items-center justify-between">
+                        <PersonalInfo
+                          title={'E-Mail'}
+                          info={user.get('email')}
+                        />
+                        <PersonalInfo
+                          title={'Address'}
+                          info={user
+                            .get('ethAddress')
+                            .slice(0, 8)
+                            .concat('...')}
+                        />
+                      </div>
+                      <div className="flex w-11/12 flex-row items-center justify-between">
+                        <PersonalInfo
+                          title={'Interested in'}
+                          info={user.get('InterestedIn').get('InterestedIn')}
+                        />
+                        <PersonalInfo
+                          title={'Location'}
+                          info={user.get('location')}
+                        />
+                      </div>
+                      <div className="w-11/12">
+                        <PersonalInfo
+                          title={'Bio'}
+                          info={user.get('userbio')}
+                        />
+                      </div>
                     </div>
                   </div> */}
                 </article>
