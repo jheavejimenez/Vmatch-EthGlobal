@@ -1,12 +1,4 @@
-import {
-  HeartIcon,
-  PhoneIncomingIcon,
-  PhoneMissedCallIcon,
-  SwitchHorizontalIcon,
-  SwitchVerticalIcon,
-  VideoCameraIcon,
-  XIcon,
-} from '@heroicons/react/solid'
+import { PhoneIncomingIcon, PhoneMissedCallIcon } from '@heroicons/react/solid'
 import { useEffect, useState } from 'react'
 
 /* This example requires Tailwind CSS v2.0+ */

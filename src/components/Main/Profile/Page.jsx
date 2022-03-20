@@ -1,62 +1,39 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
-import { Fragment, useEffect, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { useEffect, useState } from 'react'
 import {
   VideoCameraIcon,
-  ChevronLeftIcon,
-  FilterIcon,
   MailIcon,
-  PhoneIcon,
-  SearchIcon,
   HeartIcon,
-  PencilAltIcon,
   PencilIcon,
 } from '@heroicons/react/solid'
 import { useMoralis } from 'react-moralis'
 import { useRouter } from 'next/router'
 import ProfileForm from './ProfileForm'
-import PersonalInfo from './PersonalInfo'
 
 const tabs = [
   { name: 'Profile', href: '#', current: true },
   { name: 'Content', href: '#', current: false },
 ]
-const profile = {
-  name: 'Ricardo Cooper',
-  imageUrl:
-    'https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-  coverImageUrl:
-    'https://images.unsplash.com/photo-1444628838545-ac4016a5418a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
-  about: `
-    <p>Tincidunt quam neque in cursus viverra orci, dapibus nec tristique. Nullam ut sit dolor consectetur urna, dui cras nec sed. Cursus risus congue arcu aenean posuere aliquam.</p>
-    <p>Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.</p>
-  `,
-  fields: {
-    Name: 'He Him',
-    Email: 'gmail.com',
-    Pronouns: 'June 8, 1990',
-    Interest: 'InterestedIn',
-    Job: 'Product Development',
-    Location: 'location',
-    // Phone: '(555) 123-4567',
-    // Salary: '$145,000',
-  },
-}
+// const profile = {
+//   name: 'Ricardo Cooper',
+//   imageUrl:
+//     'https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+//   coverImageUrl:
+//     'https://images.unsplash.com/photo-1444628838545-ac4016a5418a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+//   about: `
+//     <p>Tincidunt quam neque in cursus viverra orci, dapibus nec tristique. Nullam ut sit dolor consectetur urna, dui cras nec sed. Cursus risus congue arcu aenean posuere aliquam.</p>
+//     <p>Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.</p>
+//   `,
+//   fields: {
+//     Name: 'He Him',
+//     Email: 'gmail.com',
+//     Pronouns: 'June 8, 1990',
+//     Interest: 'InterestedIn',
+//     Job: 'Product Development',
+//     Location: 'location',
+//     // Phone: '(555) 123-4567',
+//     // Salary: '$145,000',
+//   },
+// }
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -97,8 +74,6 @@ export default function Page() {
           Pronouns: user.get('Pronouns').get('Pronouns'),
           Interest: user.get('InterestedIn').get('InterestedIn'),
           Location: user.get('location'),
-          // Phone: '(555) 123-4567',
-          // Salary: '$145,000',
         },
       })
     }
@@ -225,11 +200,6 @@ export default function Page() {
                           </div>
                         </div>
                       </div>
-                      {/* <div className="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
-                        <h1 className="truncate text-2xl font-bold text-gray-900">
-                          {profile.name}
-                        </h1>
-                      </div> */}
                     </div>
                   </div>
 
@@ -285,52 +255,6 @@ export default function Page() {
                       </div>
                     </dl>
                   </div>
-
-                  {/* <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex w-full flex-col items-center ">
-                      <div className="flex w-11/12 flex-row items-center justify-between">
-                        <PersonalInfo
-                          title={'Name'}
-                          info={
-                            user.get('firstName') + ' ' + user.get('lastName')
-                          }
-                        />
-                        <PersonalInfo
-                          title={'Pronouns'}
-                          info={user.get('Pronouns').get('Pronouns')}
-                        />
-                      </div>
-                      <div className="flex w-11/12 flex-row items-center justify-between">
-                        <PersonalInfo
-                          title={'E-Mail'}
-                          info={user.get('email')}
-                        />
-                        <PersonalInfo
-                          title={'Address'}
-                          info={user
-                            .get('ethAddress')
-                            .slice(0, 8)
-                            .concat('...')}
-                        />
-                      </div>
-                      <div className="flex w-11/12 flex-row items-center justify-between">
-                        <PersonalInfo
-                          title={'Interested in'}
-                          info={user.get('InterestedIn').get('InterestedIn')}
-                        />
-                        <PersonalInfo
-                          title={'Location'}
-                          info={user.get('location')}
-                        />
-                      </div>
-                      <div className="w-11/12">
-                        <PersonalInfo
-                          title={'Bio'}
-                          info={user.get('userbio')}
-                        />
-                      </div>
-                    </div>
-                  </div> */}
                 </article>
               )}
             </main>

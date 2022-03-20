@@ -1,11 +1,5 @@
-import {
-  HeartIcon,
-  SwitchHorizontalIcon,
-  SwitchVerticalIcon,
-  VideoCameraIcon,
-  XIcon,
-} from '@heroicons/react/solid'
-import Router, { useRouter } from 'next/router'
+import { HeartIcon, VideoCameraIcon, XIcon } from '@heroicons/react/solid'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 /* This example requires Tailwind CSS v2.0+ */
