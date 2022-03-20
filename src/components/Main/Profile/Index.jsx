@@ -1,6 +1,6 @@
 import Dashboard from '../Fixed/Dashboard'
 import Notifications from '../Fixed/Notifications'
-import Test from '../../Test/Test'
+import Page from './Page'
 
 export default function Explore() {
   return (
@@ -9,7 +9,7 @@ export default function Explore() {
         <Dashboard />
       </div>
       <div className="flex w-full flex-col justify-center">
-        <Test />
+        <Page />
       </div>
       <div className="fixed right-0 z-40 flex w-2/12">
         <Notifications />

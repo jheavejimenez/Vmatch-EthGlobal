@@ -3,7 +3,7 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { Fragment, useEffect, useState } from 'react'
 import { useMoralis, useMoralisFile } from 'react-moralis'
 
-export default function TestForm(props) {
+export default function ProfileForm(props) {
   function closeModal() {
     props.handleEdit(false)
   }
@@ -19,6 +19,14 @@ export default function TestForm(props) {
 
   const [selectIntId, setSelectIntId] = useState(new Map())
   const [selectPronId, setSelectPronId] = useState(new Map())
+
+  //disable cancel button
+  const [profileHandle, setProfileHandle] = useState()
+  useEffect(() => {
+    if (user) {
+      setProfileHandle(user.get('handle'))
+    }
+  }, [user])
 
   // selector interested in
   useEffect(() => {
@@ -61,15 +69,11 @@ export default function TestForm(props) {
     const userBio = document.getElementById('userBio').value
     const profileFile = document.getElementById('profile-upload').files[0]
     const coverFile = document.getElementById('cover-upload').files[0]
-    const wAddress = user.get('ethAddress')
-
     //personal
     const firstName = document.getElementById('firstName').value
     const lastName = document.getElementById('lastName').value
     const email = document.getElementById('userEmail').value
     const location = document.getElementById('userLocation').value
-    const selectedInterestedId = selectedInt
-    const selectedPronounsId = selectedPron
 
     let ipfsProfile = ''
     let ipfsCover = ''
@@ -93,35 +97,30 @@ export default function TestForm(props) {
       )
     }
 
-    const UserProfile = new Moralis.Object.extend('UserProfile')
-    const userProfile = new UserProfile()
-
     const InterestedIn = Moralis.Object.extend('InterestedIn')
     const int = new InterestedIn()
-    int.set('objectId', selectedInterestedId[selectedInt])
+    int.set('objectId', selectIntId[selectedInt])
 
+    console.log(selectIntId[selectedInt])
     const Pronouns = Moralis.Object.extend('Pronouns')
     const pro = new Pronouns()
-    pro.set('objectId', selectedPronounsId[selectedPron])
+    pro.set('objectId', selectPronId[selectedPron])
 
     //profile
-    userProfile.set('username', userName)
-    userProfile.set('userbio', userBio)
-    userProfile.set('profileImg', ipfsProfile)
-    userProfile.set('coverImg', ipfsCover)
-    userProfile.set('ethAddress', wAddress)
-
+    user.set('handle', userName)
+    user.set('username', userName)
+    user.set('userbio', userBio)
+    user.set('profileImg', ipfsProfile)
+    user.set('coverImg', ipfsCover)
     //personal
-    userProfile.set('first name', firstName)
-    userProfile.set('last name', lastName)
-    userProfile.set('email', email)
-    userProfile.set('location', location)
-    userProfile.set('InterestedIn', int)
-    userProfile.set('Pronouns', pro)
-
-    userProfile.save().then((object) => {
-      // contractCall(object);
-      // setIsUploading(false)
+    user.set('firstName', firstName)
+    user.set('lastName', lastName)
+    user.set('email', email)
+    user.set('location', location)
+    user.set('InterestedIn', int)
+    user.set('Pronouns', pro)
+    //saving
+    user.save().then((object) => {
       alert('saved')
       props.handleEdit(false)
     })
@@ -183,7 +182,7 @@ export default function TestForm(props) {
               </label>
               <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
                 <div className="space-y-1 text-center">
-                  {/* <svg
+                  <svg
                     className="mx-auto h-12 w-12 text-gray-400"
                     stroke="currentColor"
                     fill="none"
@@ -196,21 +195,25 @@ export default function TestForm(props) {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
-                  </svg> */}
+                  </svg>
                   <div className="flex text-sm text-gray-600">
                     <label
-                      htmlFor="file-upload"
+                      htmlFor="profile-upload"
                       className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
                     >
-                      {/* <span>Upload a file</span> */}
+                      <span>Upload a file</span>
                       <input
                         id="profile-upload"
                         name="profile-upload"
                         type="file"
-                        // className="sr-only"
+                        className="sr-only"
                       />
                     </label>
+                    <p className="pl-1">or drag and drop</p>
                   </div>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
                 </div>
               </div>
             </div>
@@ -223,7 +226,7 @@ export default function TestForm(props) {
               </label>
               <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
                 <div className="space-y-1 text-center">
-                  {/* <svg
+                  <svg
                     className="mx-auto h-12 w-12 text-gray-400"
                     stroke="currentColor"
                     fill="none"
@@ -236,21 +239,25 @@ export default function TestForm(props) {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
-                  </svg> */}
+                  </svg>
                   <div className="flex text-sm text-gray-600">
                     <label
-                      htmlFor="file-upload"
+                      htmlFor="cover-upload"
                       className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
                     >
-                      {/* <span>Upload a file</span> */}
+                      <span>Upload a file</span>
                       <input
                         id="cover-upload"
                         name="cover-upload"
                         type="file"
-                        // className="sr-only"
+                        className="sr-only"
                       />
                     </label>
+                    <p className="pl-1">or drag and drop</p>
                   </div>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
                 </div>
               </div>
             </div>
@@ -484,8 +491,9 @@ export default function TestForm(props) {
         <div className="flex justify-end">
           <button
             type="button"
-            className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            className={`rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
             onClick={closeModal}
+            disabled={profileHandle ? false : true}
           >
             Cancel
           </button>

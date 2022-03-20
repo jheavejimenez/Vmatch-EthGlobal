@@ -4,11 +4,21 @@ import { useMoralis } from 'react-moralis'
 import Login from '../src/components/Login/Index'
 import HeaderApp from '../src/components/Main/Fixed/HeaderApp'
 import MainApp from '../src/components/Main/Explore/Index'
+import { Router, useRouter } from 'next/router'
 
 const Home: NextPage = () => {
-  const { isAuthenticated } = useMoralis()
+  const { isAuthenticated, user } = useMoralis()
+
+  const router = useRouter()
 
   if (!isAuthenticated) return <Login />
+
+  if (user) {
+    const handle = user.get('handle')
+    if (handle == undefined) {
+      router.push('profile')
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-50 py-2">
