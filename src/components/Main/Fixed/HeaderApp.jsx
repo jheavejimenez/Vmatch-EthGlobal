@@ -116,7 +116,7 @@ export default function HeaderApp() {
               )}
             </div>
             <Image
-              src={user.get('profileImg')}
+              src={'/ph.png'}
               height={35}
               width={35}
               className="z-50 rounded-full"

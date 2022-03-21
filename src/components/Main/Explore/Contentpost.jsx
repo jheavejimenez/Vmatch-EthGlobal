@@ -76,7 +76,7 @@ export default function Post() {
         <div className="bg-white shadow sm:rounded-lg">
           <div className="flex flex-row px-4 py-5 sm:px-6">
             <Image
-              src={user.get('profileImg')}
+              src={'/ph.png'}
               height={45}
               width={45}
               className="mr-4 rounded-full "

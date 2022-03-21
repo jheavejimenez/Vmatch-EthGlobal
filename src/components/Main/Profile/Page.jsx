@@ -8,6 +8,7 @@ import {
 import { useMoralis } from 'react-moralis'
 import { useRouter } from 'next/router'
 import ProfileForm from './ProfileForm'
+import Image from 'next/image'
 
 const tabs = [
   { name: 'Profile', href: '#', current: true },
@@ -62,7 +63,7 @@ export default function Page() {
   })
 
   useEffect(() => {
-    if (user) {
+    if (user && user.get('handle') != undefined) {
       setProfile({
         name: user.get('username'),
         imageUrl: user.get('profileImg'),
@@ -130,9 +131,11 @@ export default function Page() {
                   {/* Profile header */}
                   <div>
                     <div>
-                      <img
+                      <Image
                         className="h-32 w-full object-cover lg:h-48"
-                        src={user.get('coverImg')}
+                        src={'/ph.png'}
+                        height={32}
+                        width={32}
                         alt=""
                       />
                     </div>
