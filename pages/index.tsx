@@ -13,12 +13,12 @@ const Home: NextPage = () => {
 
   if (!isAuthenticated) return <Login />
 
-  if (user) {
-    const handle = user.get('handle')
-    if (handle != user.get('username')) {
-      router.push('profile')
-    } else router.push('/')
-  }
+  // if (user) {
+  //   const handle = user.get('handle')
+  //   if (handle != user.get('username')) {
+  //     router.push('profile')
+  //   } else router.push('/')
+  // }
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-50 py-2">
