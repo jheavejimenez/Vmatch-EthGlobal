@@ -74,11 +74,11 @@ export default function HeaderApp() {
                   </Popover.Button>
                 </div>
               </div>
-              <img
+              {/* <img
                 className="mr-8 h-8 w-auto"
                 src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
                 alt="Workflow"
-              />
+              /> */}
               <div className="hidden space-x-8 md:ml-10 md:flex">
                 {navigation.map((item) => (
                   <a

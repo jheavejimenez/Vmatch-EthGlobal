@@ -8,6 +8,7 @@ import {
   UserIcon,
 } from '@heroicons/react/outline'
 import Image from 'next/image'
+import { useMoralis } from 'react-moralis'
 
 const user = {
   name: 'Whitney Francis',
@@ -66,6 +67,8 @@ const comments = [
 ]
 
 export default function Post() {
+  const { user } = useMoralis()
+
   return (
     <div className="mt-36 w-3/12 space-y-6 lg:col-span-2 lg:col-start-1">
       {/* Description list*/}
@@ -73,7 +76,7 @@ export default function Post() {
         <div className="bg-white shadow sm:rounded-lg">
           <div className="flex flex-row px-4 py-5 sm:px-6">
             <Image
-              src={'/fp.jpeg'}
+              src={user.get('profileImg')}
               height={45}
               width={45}
               className="mr-4 rounded-full "
