@@ -5,6 +5,7 @@ import Login from '../src/components/Login/Index'
 import HeaderApp from '../src/components/Main/Fixed/HeaderApp'
 import MainApp from '../src/components/Main/Explore/Index'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const Home: NextPage = () => {
   const { isAuthenticated, user } = useMoralis()
@@ -13,12 +14,14 @@ const Home: NextPage = () => {
 
   if (!isAuthenticated) return <Login />
 
-  // if (user) {
-  //   const handle = user.get('handle')
-  //   if (handle != user.get('username')) {
-  //     router.push('profile')
-  //   } else router.push('/')
-  // }
+  useEffect(() => {
+    if (user) {
+      const handle = user.get('handle')
+      if (handle != user.get('username')) {
+        router.push('profile')
+      } else router.push('/')
+    }
+  }, [user])
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-50 py-2">

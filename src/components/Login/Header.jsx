@@ -3,6 +3,8 @@ import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/solid'
 import { useChain, useMoralis } from 'react-moralis'
 
+import login from '../../lenspro/login'
+
 const navigation = [
   { name: 'Home', href: '#' },
   { name: 'About', href: '#' },
@@ -18,7 +20,6 @@ export default function Header() {
     authenticate,
     logout,
     enableWeb3,
-    isWeb3EnableLoading,
     isWeb3Enabled,
   } = useMoralis()
 
@@ -41,7 +42,9 @@ export default function Header() {
 
   function handleClick() {
     if (!isAuthenticated) {
-      authenticate()
+      authenticate().then(() => {
+        login()
+      })
     } else if (isAuthenticated) {
       logout()
     }
@@ -57,14 +60,6 @@ export default function Header() {
           >
             <div className="flex flex-1 items-center">
               <div className="flex w-full items-center justify-between md:w-auto">
-                {/* <a href="#">
-                    <span className="sr-only">Workflow</span>
-                    <img
-                      className="h-8 w-auto sm:h-10"
-                      src="https://tailwindui.com/img/logos/workflow-mark-teal-200-cyan-400.svg"
-                      alt=""
-                    />
-                  </a> */}
                 <div className="-mr-2 flex items-center md:hidden">
                   <Popover.Button className="focus-ring-inset inline-flex items-center justify-center rounded-md bg-gray-900 p-2 text-gray-400 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-white">
                     <span className="sr-only">Open main menu</span>

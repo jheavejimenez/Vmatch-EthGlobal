@@ -63,7 +63,7 @@ export default function Page() {
   })
 
   useEffect(() => {
-    if (user && user.get('handle') != undefined) {
+    if (user) {
       setProfile({
         name: user.get('username'),
         imageUrl: user.get('profileImg'),
@@ -131,11 +131,9 @@ export default function Page() {
                   {/* Profile header */}
                   <div>
                     <div>
-                      <Image
+                      <img
                         className="h-32 w-full object-cover lg:h-48"
-                        src={'/ph.png'}
-                        height={32}
-                        width={32}
+                        src={user.get('coverImg')}
                         alt=""
                       />
                     </div>

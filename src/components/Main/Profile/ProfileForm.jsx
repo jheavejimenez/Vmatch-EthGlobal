@@ -2,6 +2,7 @@ import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { Fragment, useEffect, useState } from 'react'
 import { useMoralis, useMoralisFile } from 'react-moralis'
+import CountrySelector from './CountrySelector'
 
 export default function ProfileForm(props) {
   function closeModal() {
@@ -61,6 +62,12 @@ export default function ProfileForm(props) {
     })
   }, [])
 
+  const [location, setLocation] = useState()
+
+  const countryValue = (value) => {
+    setLocation(value.value)
+  }
+
   async function updateProfile(e) {
     e.preventDefault()
 
@@ -73,7 +80,6 @@ export default function ProfileForm(props) {
     const firstName = document.getElementById('firstName').value
     const lastName = document.getElementById('lastName').value
     const email = document.getElementById('userEmail').value
-    const location = document.getElementById('userLocation').value
 
     let ipfsProfile = ''
     let ipfsCover = ''
@@ -106,6 +112,43 @@ export default function ProfileForm(props) {
     const pro = new Pronouns()
     pro.set('objectId', selectPronId[selectedPron])
 
+    const updateProfileRequest = {
+      profileId: user.get(profileId),
+      name: firstName + ' ' + lastName,
+      bio: userBio,
+      location: location,
+      website: null,
+      twitterUrl: null,
+      coverPicture: null,
+    }
+
+    const createProfileRequest = {
+      handle: userName,
+      profilePictureUri: ipfsProfile,
+      name: firstName + ' ' + lastName,
+      bio: userBio,
+      location: location,
+      followNFTURI: null,
+      followModule: null,
+    }
+
+    if (user.get('handle') == undefined) {
+      if (!getAuthenticationToken()) {
+        console.log('You are not logged in')
+        return
+      }
+      createProfile(createProfileRequest).then(
+        (result) => {
+          if (result.data.createProfile.reason == 'HANDLE_TAKEN')
+            alert('Profile Taken')
+        },
+        (err) => {
+          console.log('Error')
+          alert(JSON.stringify(err.graphQLErrors[0].message))
+        }
+      )
+    }
+
     //profile
     user.set('handle', userName)
     user.set('username', userName)
@@ -120,6 +163,7 @@ export default function ProfileForm(props) {
     user.set('InterestedIn', int)
     user.set('Pronouns', pro)
     //saving
+
     user.save().then((object) => {
       alert('saved')
       props.handleEdit(false)
@@ -332,12 +376,13 @@ export default function ProfileForm(props) {
                 Location
               </label>
               <div className="mt-1">
-                <input
+                {/* <input
                   type="text"
                   name="userLocation"
                   id="userLocation"
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
+                /> */}
+                <CountrySelector onChange={countryValue} />
               </div>
             </div>
 
