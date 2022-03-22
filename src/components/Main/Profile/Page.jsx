@@ -8,7 +8,6 @@ import {
 import { useMoralis } from 'react-moralis'
 import { useRouter } from 'next/router'
 import ProfileForm from './ProfileForm'
-import Image from 'next/image'
 
 const tabs = [
   { name: 'Profile', href: '#', current: true },
@@ -72,8 +71,8 @@ export default function Page() {
         fields: {
           Name: user.get('firstName') + ' ' + user.get('lastName'),
           Email: user.get('email'),
-          Pronouns: user.get('Pronouns').get('Pronouns'),
-          Interest: user.get('InterestedIn').get('InterestedIn'),
+          Pronouns: user.get('Pronouns')?.get('Pronouns'),
+          Interest: user.get('InterestedIn')?.get('InterestedIn'),
           Location: user.get('location'),
         },
       })
