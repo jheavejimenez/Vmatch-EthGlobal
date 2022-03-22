@@ -25,12 +25,18 @@ export default function ProfileForm(props) {
 
   const [selectIntId, setSelectIntId] = useState(new Map())
   const [selectPronId, setSelectPronId] = useState(new Map())
-
+  const [userBio,setUserBio]  = useState(user.get("userbio"))
+  const [firstName,setFirstName]  = useState(user.get("firstName"))
+  const [lastName,setLastName]  = useState(user.get("lastName"))
+  const [email,setEmail]  = useState(user.get("email"))
+  const [userName,setUserName]  = useState(user.get("username"))
   //disable cancel button
   const [profileHandle, setProfileHandle] = useState()
   useEffect(() => {
     if (user) {
+     
       setProfileHandle(user.get('handle'))
+      setLocation(user.get("location"));
     }
   }, [user])
 
@@ -66,7 +72,7 @@ export default function ProfileForm(props) {
     })
   }, [])
 
-  const [location, setLocation] = useState()
+  const [location, setLocation] = useState(user.get("location"))
 
   const countryValue = (value) => {
     setLocation(value.value)
@@ -138,11 +144,13 @@ export default function ProfileForm(props) {
       location: location,
       website: null,
       twitterUrl: null,
+
+
     }
 
     const createProfileRequest = {
       handle: userName,
-      profilePictureUri: null,
+      profilePictureUri: ipfsProfile,
       followNFTURI: null,
       followModule: null,
     }
@@ -174,7 +182,9 @@ export default function ProfileForm(props) {
     user.set('handle', userName)
     user.set('username', userName)
     user.set('userbio', userBio)
+    if(ipfsProfile)
     user.set('profileImg', ipfsProfile)
+    if(ipfsCover)
     user.set('coverImg', ipfsCover)
     //personal
     user.set('firstName', firstName)
@@ -211,6 +221,8 @@ export default function ProfileForm(props) {
                   type="text"
                   name="userName"
                   id="userName"
+                  value={userName}
+                  onChange={e => setUserName(e.target.value)}
                   autoComplete="username"
                   className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
@@ -228,6 +240,8 @@ export default function ProfileForm(props) {
                 <textarea
                   id="userBio"
                   name="userBio"
+                  value={userBio}
+                  onChange={e => setUserBio(e.target.value)}
                   rows={3}
                   className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   defaultValue={''}
@@ -346,6 +360,9 @@ export default function ProfileForm(props) {
                 <input
                   type="text"
                   name="firstName"
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
+                  
                   id="firstName"
                   autoComplete="given-name"
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -364,6 +381,9 @@ export default function ProfileForm(props) {
                 <input
                   type="text"
                   name="lastName"
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
+                  
                   id="lastName"
                   autoComplete="family-name"
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -382,6 +402,9 @@ export default function ProfileForm(props) {
                   type="text"
                   name="userEmail"
                   id="userEmail"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  
                   autoComplete="given-name"
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
@@ -402,7 +425,7 @@ export default function ProfileForm(props) {
                   id="userLocation"
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 /> */}
-                <CountrySelector onChange={countryValue} />
+                <CountrySelector value={location}  onChange={countryValue} />
               </div>
             </div>
 

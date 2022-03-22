@@ -3,9 +3,8 @@ import Select from 'react-select'
 import countryList from 'react-select-country-list'
 
 function CountrySelector(props) {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState(props.value)
   const options = useMemo(() => countryList().getData(), [])
-
   const changeHandler = (value) => {
     setValue(value)
     props.onChange(value)

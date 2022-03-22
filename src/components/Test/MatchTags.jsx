@@ -1,76 +1,169 @@
 import { HeartIcon, VideoCameraIcon, XIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useState,useRef } from 'react'
+import { useMoralis } from 'react-moralis'
+import axios from "axios";
 
-/* This example requires Tailwind CSS v2.0+ */
-const people = [
-  {
-    name: 'Leonard Krasner',
-    location: 'New York',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    twitterUrl: '#',
-    linkedinUrl: '#',
-  },
-  // More people...
-]
+
 
 export default function Example() {
   const router = useRouter()
   const [match, setMatch] = useState(true)
+  const { Moralis, user } = useMoralis()
+  const matches = useRef([])
+  const [currentMatch,setCurrentMatch] = useState([])
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    async function getMatches()
+    {
+        if (user) 
+        {
+           Moralis.Cloud.run("getMatches",{id:user.id}).then((results)=>{
+             matches.current = results; 
+             console.log(results)
+             if(results.length > 0)
+              setCurrentMatch([results[0]]);
+           }) 
+          
+        }
+    }
+
+    getMatches();
+  }, [user])
 
   function matchDenied() {
     //not matched, show next
+    if(matches.current.length > 0)
+    {
+      matches.current.splice(0,1);
+      if(matches.current.length > 0)
+       setCurrentMatch([matches.current[0]]);
+      else
+        setCurrentMatch([]); 
+    }
   }
 
   function matchAccepted() {
     // MATCHED, show next
+    if(matches.current.length > 0)
+    {
+      matches.current.splice(0,1);
+      if(matches.current.length > 0)
+       setCurrentMatch([matches.current[0]]);
+      else
+        setCurrentMatch([]); 
+    }
   }
 
   function videoChat() {
-    router.push('/videochat')
+    if(user.get("stream") == undefined)
+    {
+      let lpObect = {};
+      const instance = axios.create({
+        baseURL: 'https://livepeer.com/api/',
+        
+        headers: {'Authorization': 'Bearer '+process.env.REACT_APP_LIVEPEER_API_KEY,
+        'content-type': 'application/json'}
+      });
+  
+      const result = instance.post('/stream',
+      {
+        "name": user.get("handle"),
+        record:false,
+  
+        "profiles": [
+          {
+            "name": "720p",
+            "bitrate": 2000000,
+            "fps": 30,
+            "width": 1280,
+            "height": 720
+          },
+          {
+            "name": "480p",
+            "bitrate": 1000000,
+            "fps": 30,
+            "width": 854,
+            "height": 480
+          },
+          {
+            "name": "360p",
+            "bitrate": 500000,
+            "fps": 30,
+            "width": 640,
+            "height": 360
+          }
+        ]
+      });
+    
+       
+      result.then(async function(resp){
+      user.set("stream",JSON.stringify(resp.data));
+      user.save().then(()=>{
+      const VideoChat = Moralis.Object.extend("VideoChat");
+      const videochat = new VideoChat();   
+      videochat.set("from",user);
+      videochat.set("to",currentMatch[0]);
+      videochat.set("live",false); 
+      videochat.save().then((object)=>{
+        router.push(`/videochat/${object.id}`)
+      })
+        
+      })
+     }); 
+    }else{
+
+      const VideoChat = Moralis.Object.extend("VideoChat");
+      const videochat = new VideoChat();   
+      videochat.set("from",user);
+      videochat.set("to",currentMatch[0]);
+      videochat.set("live",false);
+
+      videochat.save().then((object)=>{
+        router.push(`/videochat/${object.id}`)
+      })
+
+    }
+ 
+    
     //start videoChat
   }
   return (
     <div className="bg-white">
       <div className="mx-auto h-full max-w-7xl py-12 px-4 sm:px-6 lg:px-8 lg:py-24">
-        <div className="flex flex-col items-center space-y-12">
+        <div className="flex flex-col items-center space-y-8">
           <div className="w-full space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
-            <div className="mt-16 flex w-full flex-row items-center justify-evenly ">
-              <button>MATCHING</button>
-            </div>
+           
             {/* <p className="items-center text-xl text-gray-300">
               Find your next date via VMATCH.
             </p> */}
           </div>
-          (
+        
           <ul
             role="list"
             className="flex w-3/12 items-center justify-center space-y-4"
           >
-            {people.map((person) => (
+            {currentMatch.map((person) => (
               <li
-                key={person.name}
+                key={person.id}
                 className="rounded-lg bg-gray-800 py-10 px-6 text-center xl:px-10 xl:text-left"
               >
                 <div className="h-96 w-72 space-y-6 xl:space-y-10">
                   <img
                     className="mx-auto h-40 w-40 rounded-full xl:h-56 xl:w-56"
-                    src={person.imageUrl}
+                    src={person.get("profileImg")}
                     alt=""
                   />
                   <div className="space-y-2 xl:flex xl:items-center xl:justify-between">
                     <div className="space-y-1 text-lg font-medium leading-6">
-                      <h3 className="text-white">{person.name}</h3>
-                      <p className="text-indigo-400">{person.location}</p>
+                      <h3 className="text-white">{person.get("firstName")} {person.get("lastName")}</h3>
+                      <p className="text-indigo-400">{person.get("location")}</p>
                     </div>
 
                     <ul role="list" className="flex justify-center space-x-5">
                       <li>
                         <a
-                          href={person.twitterUrl}
+                          href={person.get("twitterUrl")}
                           className="text-gray-400 hover:text-gray-300"
                         >
                           <span className="sr-only">Twitter</span>

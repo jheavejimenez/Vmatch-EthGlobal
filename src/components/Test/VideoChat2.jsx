@@ -1,4 +1,4 @@
-import { HeartIcon, PhoneMissedCallIcon } from '@heroicons/react/solid'
+import { PhoneIncomingIcon, PhoneMissedCallIcon } from '@heroicons/react/solid'
 import { useEffect, useState ,useRef} from 'react'
 import { useRouter } from 'next/router'
 import { useMoralis } from 'react-moralis'
@@ -152,27 +152,56 @@ export default function Example() {
           </div>
           <div className="flex w-full flex-row items-center justify-evenly">
             <div className="flex w-3/12 items-center ">
-              <div className="rounded-lg shadow bg-gray-800 px-2 pt-4 pb-24">
-                <div className="h-96 w-full space-y- xl:space-y-6">
+              <div className="rounded-lg bg-gray-800 px-2 pt-4 pb-24">
+                <div className="h-96 w-72 space-y-6 xl:space-y-6">
                   
-<div className="w-full h-full bg-rose-200" ref={videoCallRef}  height={height}>
+<div className="w-500 h-full bg-rose-200" ref={videoCallRef}  height={height}>
 </div>
-                 
+                  <video className="w-500 h-full bg-white" ref={videoRef} >
+                    <img
+                      className="mx-auto h-40 w-40 rounded-full xl:h-56 xl:w-56"
+                      src={
+                        'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80'
+                      }
+                      alt=""
+                    />
+                  </video>
+
                   <div className="flex h-max flex-row items-start justify-between px-4">
-                  <button className="" onClick={streamButtonClicked}>
-                      <HeartIcon className="h-10 rounded-full bg-white p-2 " />
+                    <button className="" onClick={streamButtonClicked}>
+                      <PhoneMissedCallIcon className="h-10 rounded-full bg-white p-2 text-red-500" />
                     </button>
                     <p className="text-sm text-white">{vchat ? user.get("firstName") + " " +user.get("lastName") :"Name"}</p>
-                    <p className="text-sm text-white">{vchat ? vchat.get("to").get("firstName") + " " +vchat.get("to").get("lastName") :"Name"}</p>
-                    
+
                     <button >
-                      <HeartIcon className="h-10 rounded-full bg-white p-2 " />
+                      <PhoneIncomingIcon className="h-10 rounded-full bg-white p-2 text-green-500" />
                     </button>
                   </div>
                 </div>
               </div>
             </div>
-                      </div>
+            <div className="flex w-3/12 items-center ">
+              <div className="rounded-lg bg-gray-800 px-2 pt-4 pb-24">
+                <div className="h-96 w-72 space-y-6 xl:space-y-10">
+                  {/* <img
+                      className="mx-auto h-40 w-40 rounded-full xl:h-56 xl:w-56"
+                      src={person.imageUrl}
+                      alt=""
+                    /> */}
+                  <video className="w-500 h-full bg-white">Hello</video>
+                  <div className="flex h-max flex-row items-start justify-between px-4">
+                    <button className="" >
+                      <PhoneMissedCallIcon className="h-10 rounded-full bg-white p-2 text-red-500" />
+                    </button>
+                    <p className="text-sm text-white">{vchat ? vchat.get("to").get("firstName") + " " +vchat.get("to").get("lastName") :"Name"}</p>
+                    <button >
+                      <PhoneIncomingIcon className="h-10 rounded-full bg-white p-2 text-green-500" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

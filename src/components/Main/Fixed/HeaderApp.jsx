@@ -115,7 +115,7 @@ export default function HeaderApp() {
                 </button>
               )}
             </div>
-            <Image
+            <img
               src={user.get('profileImg')}
               height={35}
               width={35}

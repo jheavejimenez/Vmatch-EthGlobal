@@ -3,11 +3,14 @@ import type { AppProps } from 'next/app'
 import { MoralisProvider } from 'react-moralis'
 import { MoralisDappProvider } from '../src/providers/MoralisDappProvider/MoralisDappProvider'
 
+import { useState } from 'react';
 const APP_ID = '1ht4NfH7fR5hWU1FxXZZn3GajY6x3EuidxfxJ4yi'
 const SERVER_URL = 'https://a207aatxvwxo.usemoralis.com:2053/server'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const isServerInfo = APP_ID && SERVER_URL ? true : false
+  const [callObject, setCallObject] = useState(null);
+
 
   if (!APP_ID || !SERVER_URL)
     throw new Error(
