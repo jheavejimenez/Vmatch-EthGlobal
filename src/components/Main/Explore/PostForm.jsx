@@ -3,7 +3,8 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { Fragment, useEffect, useState } from 'react'
 import { useMoralis, useMoralisFile } from 'react-moralis'
 
-export default function ProfileForm(props) {
+const type = [{ name: 'Free' }, { name: 'Pay to View' }]
+export default function PostForm(props) {
   function closeModal() {
     props.handlePost(false)
   }
@@ -13,6 +14,8 @@ export default function ProfileForm(props) {
 
   //disable cancel button
   const [profileHandle, setProfileHandle] = useState()
+
+  const [selected, setSelected] = useState()
   useEffect(() => {
     if (user) {
       setProfileHandle(user.get('handle'))
@@ -22,75 +25,52 @@ export default function ProfileForm(props) {
   async function posting(e) {
     e.preventDefault()
 
-    //profile
-    const userName = document.getElementById('userName').value
-    const userBio = document.getElementById('userBio').value
-    const profileFile = document.getElementById('profile-upload').files[0]
-    const coverFile = document.getElementById('cover-upload').files[0]
-    //personal
-    const firstName = document.getElementById('firstName').value
-    const lastName = document.getElementById('lastName').value
-    const email = document.getElementById('userEmail').value
-    const location = document.getElementById('userLocation').value
+    //fetching content from form
+    const contentFile = document.getElementById('contentFile').files[0]
+    const contentDescription =
+      document.getElementById('contentDescription').value
+    const contentType = selected
+    const contentPrice = document.getElementById('contentPrice').value
 
-    let ipfsProfile = ''
-    let ipfsCover = ''
+    let ipfsContent = ''
 
-    if (profileFile) {
-      console.log('uploading profile picture')
-      await saveFile('profileFile', profileFile, { saveIPFS: true }).then(
+    if (contentFile) {
+      console.log('uploading content')
+      await saveFile('contentFile', contentFile, { saveIPFS: true }).then(
         async (hash) => {
           console.log(hash)
-          ipfsProfile = hash._ipfs
-        }
-      )
-    }
-    if (coverFile) {
-      console.log('uploading file')
-      await saveFile('coverFile', coverFile, { saveIPFS: true }).then(
-        async (hash) => {
-          console.log(hash)
-          ipfsCover = hash._ipfs
+          ipfsContent = hash._ipfs
         }
       )
     }
 
-    const InterestedIn = Moralis.Object.extend('InterestedIn')
-    const int = new InterestedIn()
-    int.set('objectId', selectIntId[selectedInt])
+    const Content = Moralis.Object.extend('Content')
+    const content = new Content()
+    // int.set('objectId', selectIntId[selectedInt])
 
-    console.log(selectIntId[selectedInt])
-    const Pronouns = Moralis.Object.extend('Pronouns')
-    const pro = new Pronouns()
-    pro.set('objectId', selectPronId[selectedPron])
+    // const Pronouns = Moralis.Object.extend('Pronouns')
+    // const pro = new Pronouns()
+    // pro.set('objectId', selectPronId[selectedPron])
 
     //profile
-    user.set('handle', userName)
-    user.set('username', userName)
-    user.set('userbio', userBio)
-    user.set('profileImg', ipfsProfile)
-    user.set('coverImg', ipfsCover)
-    //personal
-    user.set('firstName', firstName)
-    user.set('lastName', lastName)
-    user.set('email', email)
-    user.set('location', location)
-    user.set('InterestedIn', int)
-    user.set('Pronouns', pro)
-    //saving
-    user.save().then((object) => {
+    content.set('contentFile', ipfsContent)
+    content.set('contentDesc', contentDescription)
+    content.set('contentType', selected)
+    content.set('contentPrice', contentPrice)
+    content.set('address', user.get('ethAddress'))
+    content.save().then((object) => {
       alert('saved')
       props.handlePost(false)
     })
   }
 
   return (
-    <form className="justfify-center mt-24 flex w-full items-center">
+    <form className="mx-auto mt-24 flex w-full flex-col">
       <div className="space-y-2">
-        <p className="text-lg font-bold">Update Profile</p>
+        <p className="text-lg font-bold">Upload Content</p>
         <div>
           <div className="mt-4 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-            <div className="sm:col-span-4">
+            {/* <div className="sm:col-span-4">
               <label
                 htmlFor="userName"
                 className="block text-sm font-medium text-gray-700"
@@ -109,34 +89,14 @@ export default function ProfileForm(props) {
                   className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
-            </div>
+            </div> */}
 
-            <div className="sm:col-span-6">
-              <label
-                htmlFor="about"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Bio
-              </label>
-              <div className="mt-1">
-                <textarea
-                  id="userBio"
-                  name="userBio"
-                  rows={3}
-                  className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  defaultValue={''}
-                />
-              </div>
-              <p className="mt-2 text-sm text-gray-500">
-                Write a few sentences about yourself.
-              </p>
-            </div>
             <div className="sm:col-span-6">
               <label
                 htmlFor="cover-photo"
                 className="block text-sm font-medium text-gray-700"
               >
-                Profile photo
+                Photo or Video
               </label>
               <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
                 <div className="space-y-1 text-center">
@@ -156,13 +116,13 @@ export default function ProfileForm(props) {
                   </svg>
                   <div className="flex text-sm text-gray-600">
                     <label
-                      htmlFor="profile-upload"
+                      htmlFor="contentFile"
                       className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
                     >
                       <span>Upload a file</span>
                       <input
-                        id="profile-upload"
-                        name="profile-upload"
+                        id="contentFile"
+                        name="contentFile"
                         type="file"
                         className="sr-only"
                       />
@@ -175,57 +135,127 @@ export default function ProfileForm(props) {
                 </div>
               </div>
             </div>
+            <div className="sm:col-span-6">
+              <label
+                htmlFor="about"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Description
+              </label>
+              <div className="mt-1">
+                <textarea
+                  id="contentDescription"
+                  name="contentDescription"
+                  rows={3}
+                  className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  defaultValue={''}
+                />
+              </div>
+              <p className="mt-2 text-sm text-gray-500">What's going on?</p>
+            </div>
           </div>
         </div>
 
         <div className="pt-4">
           <div>
             <h3 className="text-lg font-medium leading-6 text-gray-900">
-              Personal Information
+              Revenue
             </h3>
           </div>
           <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <label
-                htmlFor="firstName"
+                htmlFor="type"
                 className="block text-sm font-medium text-gray-700"
               >
-                First name
+                Type
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
-                  name="firstName"
-                  id="firstName"
-                  autoComplete="given-name"
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
+                <div className="w-72">
+                  <Listbox value={selected} onChange={setSelected}>
+                    <div className="relative mt-1">
+                      <Listbox.Button className="relative w-full cursor-default rounded-lg bg-[#9945FF] bg-opacity-10 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                        <span className="block truncate">
+                          {selected ? selected : 'Choose Category'}
+                        </span>
+                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                          <SelectorIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </Listbox.Button>
+                      <Transition
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                          {type.map((content, index) => (
+                            <Listbox.Option
+                              key={index}
+                              className={({ active }) =>
+                                `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                                  active
+                                    ? 'bg-amber-100 text-amber-900'
+                                    : 'text-gray-900'
+                                }`
+                              }
+                              value={content.name}
+                            >
+                              {({ selected }) => (
+                                <>
+                                  <span
+                                    className={`block truncate ${
+                                      selected ? 'font-medium' : 'font-normal'
+                                    }`}
+                                  >
+                                    {content.name}
+                                  </span>
+                                  {selected ? (
+                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                      <CheckIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </Transition>
+                    </div>
+                  </Listbox>
+                </div>
               </div>
             </div>
 
             <div className="sm:col-span-3">
               <label
-                htmlFor="last-name"
+                htmlFor="contentPrice"
                 className="block text-sm font-medium text-gray-700"
               >
-                Last name
+                Price in Matic
               </label>
               <div className="mt-1">
                 <input
-                  type="text"
-                  name="lastName"
-                  id="lastName"
+                  type="number"
+                  name="contentPrice"
+                  id="contentPrice"
                   autoComplete="family-name"
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
             </div>
-            <div className="sm:col-span-3">
+            {/* <div className="sm:col-span-3">
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email
+                Duration of Post
               </label>
               <div className="mt-1">
                 <input
@@ -253,7 +283,7 @@ export default function ProfileForm(props) {
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
