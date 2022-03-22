@@ -3,6 +3,11 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { Fragment, useEffect, useState } from 'react'
 import { useMoralis, useMoralisFile } from 'react-moralis'
 import CountrySelector from './CountrySelector'
+import { createProfile } from '../../../lenspro/createprofile'
+import { getAuthenticationToken } from '../../../lenspro/state'
+import { getAddressFromSigner } from '../../../lenspro/ethers-service'
+import { profiles } from '../../../lenspro/profile'
+import { updateProfile } from '../../../lenspro/updateprofile'
 
 export default function ProfileForm(props) {
   function closeModal() {
@@ -42,7 +47,6 @@ export default function ProfileForm(props) {
       })
       setInterestedIn(r)
       setSelectIntId(rmap)
-      console.log(selectIntId)
     })
   }, [])
 
@@ -68,7 +72,22 @@ export default function ProfileForm(props) {
     setLocation(value.value)
   }
 
-  async function updateProfile(e) {
+  useEffect(() => {
+    async function checkUser() {
+      const address = await getAddressFromSigner()
+      console.log(address)
+      const profile = await profiles({ ownedBy: [address] })
+      console.log(profile.profiles.items)
+      if (profile.profiles.items.length > 0) {
+        user.set('profileId', profile.profiles.items[0].id)
+      }
+    }
+    if (user && user.get('profileId') == undefined) checkUser()
+  }, [user])
+
+  // Save User Info & create / Lens profile
+
+  async function interactWProfile(e) {
     e.preventDefault()
 
     //profile
@@ -113,43 +132,45 @@ export default function ProfileForm(props) {
     pro.set('objectId', selectPronId[selectedPron])
 
     const updateProfileRequest = {
-      profileId: user.get(profileId),
+      profileId: user.get('profileId'),
       name: firstName + ' ' + lastName,
       bio: userBio,
       location: location,
       website: null,
       twitterUrl: null,
-      coverPicture: null,
     }
 
     const createProfileRequest = {
       handle: userName,
-      profilePictureUri: ipfsProfile,
-      name: firstName + ' ' + lastName,
-      bio: userBio,
-      location: location,
+      profilePictureUri: null,
       followNFTURI: null,
       followModule: null,
     }
 
-    if (user.get('handle') == undefined) {
-      if (!getAuthenticationToken()) {
-        console.log('You are not logged in')
-        return
-      }
+    if (!getAuthenticationToken()) {
+      console.log('You are not logged in')
+      return
+    }
+
+    if (user.get('profileId') == undefined) {
       createProfile(createProfileRequest).then(
         (result) => {
           if (result.data.createProfile.reason == 'HANDLE_TAKEN')
-            alert('Profile Taken')
+            alert(JSON.stringify(result))
+
+          console.log(result)
+          console.log('its thiS')
         },
         (err) => {
           console.log('Error')
-          alert(JSON.stringify(err.graphQLErrors[0].message))
+          alert(JSON.stringify(err))
         }
       )
+    } else {
+      const result = await updateProfile(updateProfileRequest)
+      console.log('UpdateProfile', result)
     }
 
-    //profile
     user.set('handle', userName)
     user.set('username', userName)
     user.set('userbio', userBio)
@@ -163,7 +184,6 @@ export default function ProfileForm(props) {
     user.set('InterestedIn', int)
     user.set('Pronouns', pro)
     //saving
-
     user.save().then((object) => {
       alert('saved')
       props.handleEdit(false)
@@ -543,7 +563,7 @@ export default function ProfileForm(props) {
             Cancel
           </button>
           <button
-            onClick={updateProfile}
+            onClick={interactWProfile}
             type="submit"
             className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >

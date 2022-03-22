@@ -1,4 +1,4 @@
-import { apolloClient } from './apollo-client';
+import { apolloClient } from './apollo-client'
 import { gql } from '@apollo/client'
 
 const GET_CHALLENGE = `
@@ -7,12 +7,12 @@ const GET_CHALLENGE = `
   }
 `
 
-export const generateChallenge = (address:string) => {
-   return apolloClient.query({
+export const generateChallenge = (address: string) => {
+  return apolloClient.query({
     query: gql(GET_CHALLENGE),
     variables: {
       request: {
-         address,
+        address,
       },
     },
   })
