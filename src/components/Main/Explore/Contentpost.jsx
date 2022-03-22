@@ -66,7 +66,7 @@ const comments = [
   },
 ]
 
-export default function Post() {
+export default function Post(props) {
   const { user } = useMoralis()
 
   return (

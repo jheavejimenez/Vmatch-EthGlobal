@@ -8,6 +8,8 @@ import {
 } from '@heroicons/react/outline'
 import { MailIcon, PhoneIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { useMoralis } from 'react-moralis'
 import Contentpost from './Contentpost'
 
 const user = {
@@ -67,8 +69,29 @@ const comments = [
 ]
 
 export default function Main() {
+  const { Moralis, user } = useMoralis()
+
+  const [exploreContent, setExploreContent] = useState()
+
+  useEffect(() => {
+    if (user) {
+      const Content = Moralis.Object.extend('Item')
+      const query = new Moralis.Query(Content)
+      query.find().then((results) => {
+        let result = []
+        results.forEach((content) => {
+          result.push(content)
+        })
+        setExploreContent(result)
+      })
+    }
+  }, [user])
+
   return (
     <div className="relative flex w-full flex-col items-center justify-center space-y-6 overflow-y-scroll lg:col-span-2 lg:col-start-1">
+      {exploreContent.map((data, index) => (
+        <ContentPost data={data} key={index} />
+      ))}
       <Contentpost />
       <Contentpost />
       <Contentpost />
