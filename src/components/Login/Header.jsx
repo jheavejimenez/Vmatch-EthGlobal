@@ -3,7 +3,8 @@ import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/solid'
 import { useChain, useMoralis } from 'react-moralis'
 
-import login from '../../lenspro/login'
+import { login } from '../../lenspro/login'
+import { setWindow } from '../../lenspro/ethers-service'
 
 const navigation = [
   { name: 'Home', href: '#' },
@@ -43,6 +44,7 @@ export default function Header() {
   function handleClick() {
     if (!isAuthenticated) {
       authenticate().then(() => {
+        setWindow(window)
         login()
       })
     } else if (isAuthenticated) {

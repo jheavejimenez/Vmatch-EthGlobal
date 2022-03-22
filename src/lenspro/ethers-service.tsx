@@ -6,9 +6,13 @@ import { omit } from './helpers'
 // It will also assume that you have already done all the connecting to metamask
 // this is purely here to show you how the public API hooks together
 
-export const ethersProvider = new ethers.providers.Web3Provider(
-  (window as any)?.ethereum
-)
+let window = ''
+let ethersProvider: any = null
+
+export const setWindow = (object: any) => {
+  window = object
+  ethersProvider = new ethers.providers.Web3Provider((window as any)?.ethereum)
+}
 
 export const getAddress = async () => {
   const accounts = await (window as any).ethereum.request({
