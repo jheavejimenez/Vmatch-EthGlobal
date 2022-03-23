@@ -89,9 +89,9 @@ export default function Main() {
 
   return (
     <div className="relative flex w-full flex-col items-center justify-center space-y-6 overflow-y-scroll lg:col-span-2 lg:col-start-1">
-      {exploreContent.map((data, index) => (
+      {/* {exploreContent.map((data, index) => (
         <ContentPost data={data} key={index} />
-      ))}
+      ))} */}
       <Contentpost />
       <Contentpost />
       <Contentpost />
