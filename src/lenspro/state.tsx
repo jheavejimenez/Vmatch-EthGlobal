@@ -1,9 +1,12 @@
-let authenticationToken: string | null = null
+//let authenticationToken: string | null = null
 export let setAuthenticationToken = (token: string) => {
-  authenticationToken = token
+  
+  localStorage.setItem("vmatch", token);
+  //authenticationToken = token
   console.log('setAuthenticationToken: token', token)
 }
 
 export let getAuthenticationToken = () => {
-  return authenticationToken
+  return localStorage.getItem("vmatch");
+
 }
