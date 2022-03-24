@@ -66,7 +66,7 @@ const comments = [
   },
 ]
 
-export default function Post(props) {
+export default function Contentpost(props) {
   const { user } = useMoralis()
 
   return (
@@ -77,6 +77,7 @@ export default function Post(props) {
           <div className="flex flex-row px-4 py-5 sm:px-6">
             <Image
               src={'/ph.png'}
+              // src={props.data.get("userImg")}
               height={45}
               width={45}
               className="mr-4 rounded-full "
@@ -87,10 +88,12 @@ export default function Post(props) {
                 className="flex flex-row text-lg font-medium leading-6 text-gray-900"
               >
                 Felix Prabitz
+                {props.data.get('contentUser')}
                 <CheckCircleIcon className="ml-1 h-3 text-green-600" />
               </div>
               <p className="mt-1 max-w-2xl text-sm text-gray-500">
                 20 mins ago
+                {/* {props.data.get('createdAt')} */}
               </p>
             </div>
           </div>
@@ -127,17 +130,19 @@ export default function Post(props) {
               <img
                 className="h-full w-full object-cover"
                 src="https://images.unsplash.com/photo-1525130413817-d45c1d127c42?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1920&q=60&sat=-100"
+                // src={props.data.get('contentImg')}
                 alt=""
               />
             </div>
             <div className="sm:col-span-2">
               <dt className="text-sm font-medium text-gray-500">My Post</dt>
               <dd className="mt-1 text-sm text-gray-900">
-                Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
+                {/* Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
                 incididunt cillum culpa consequat. Excepteur qui ipsum aliquip
                 consequat sint. Sit id mollit nulla mollit nostrud in ea officia
                 proident. Irure nostrud pariatur mollit ad adipisicing
-                reprehenderit deserunt qui eu.
+                reprehenderit deserunt qui eu. */}
+                {props.data.get('contentDesc')}
               </dd>
             </div>
             {/* </dl> */}
@@ -165,14 +170,6 @@ export default function Post(props) {
               <CashIcon className="ml-1 h-3" />
             </button>
           </div>
-          {/* <div>
-              <a
-                href="#"
-                className="block bg-gray-50 px-4 py-4 text-center text-sm font-medium text-gray-500 hover:text-gray-700 sm:rounded-b-lg"
-              >
-                Read full application
-              </a>
-            </div> */}
         </div>
       </section>
     </div>

@@ -71,11 +71,11 @@ const comments = [
 export default function Main() {
   const { Moralis, user } = useMoralis()
 
-  const [exploreContent, setExploreContent] = useState()
+  const [exploreContent, setExploreContent] = useState([])
 
   useEffect(() => {
     if (user) {
-      const Content = Moralis.Object.extend('Item')
+      const Content = Moralis.Object.extend('Content')
       const query = new Moralis.Query(Content)
       query.find().then((results) => {
         let result = []
@@ -83,19 +83,20 @@ export default function Main() {
           result.push(content)
         })
         setExploreContent(result)
+        console.log(result)
       })
     }
   }, [user])
 
   return (
     <div className="relative flex w-full flex-col items-center justify-center space-y-6 overflow-y-scroll lg:col-span-2 lg:col-start-1">
-      {/* {exploreContent.map((data, index) => (
-        <ContentPost data={data} key={index} />
-      ))} */}
+      {exploreContent.map((data, index) => (
+        <Contentpost data={data} key={index} />
+      ))}
+      {/* <Contentpost />
       <Contentpost />
       <Contentpost />
-      <Contentpost />
-      <Contentpost />
+      <Contentpost /> */}
     </div>
   )
 }

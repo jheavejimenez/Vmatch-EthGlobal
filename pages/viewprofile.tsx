@@ -1,9 +1,9 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useMoralis } from 'react-moralis'
-import Login from '../../src/components/Login/Index'
-import HeaderApp from '../../src/components/Main/Fixed/HeaderApp'
-import VideoChat from '../../src/components/Main/VideoChat/Index'
+import Login from '../src/components/Login/Index'
+import HeaderApp from '../src/components/Main/Fixed/HeaderApp'
+import ViewProfile from '../src/components/Main/Profile/ViewProfile'
 
 const Home: NextPage = () => {
   const { isAuthenticated } = useMoralis()
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <HeaderApp />
-      <VideoChat />
+      <ViewProfile />
     </div>
   )
 }

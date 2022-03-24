@@ -25,10 +25,27 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Page() {
+export default function ViewPage() {
   const { user, Moralis } = useMoralis()
 
   const router = useRouter()
+  const { id } = router.query
+
+  const [userProfile, setUserProfile] = useState()
+
+  useEffect(() => {
+    if (id) {
+      const User = Moralis.Object.extend('_User')
+      const query = new Moralis.Query(User)
+      query.equalTo('handle', id)
+      query.first().then((result) => {
+        console.log(result)
+        setUserProfile(result)
+        //   setLivepeerStreamObject(JSON.parse(user.get('stream')))
+      })
+    }
+  }, [])
+
   // BUTTONS
   const [matched, setMatched] = useState()
   const [editModal, setEditModal] = useState()
@@ -79,18 +96,18 @@ export default function Page() {
   })
 
   useEffect(() => {
-    if (user) {
+    if (userProfile) {
       setProfile({
-        name: user.get('username'),
-        imageUrl: user.get('profileImg'),
-        coverImageUrl: user.get('coverImg'),
-        about: user.get('userbio'),
+        name: userProfile.get('username'),
+        imageUrl: userProfile.get('profileImg'),
+        coverImageUrl: userProfile.get('coverImg'),
+        about: userProfile.get('userbio'),
         fields: {
-          Name: user.get('firstName') + ' ' + user.get('lastName'),
-          Email: user.get('email'),
-          Pronouns: user.get('Pronouns')?.get('Pronouns'),
-          Interest: user.get('InterestedIn')?.get('InterestedIn'),
-          Location: user.get('location'),
+          Name: userProfile.get('firstName') + ' ' + user.get('lastName'),
+          Email: userProfile.get('email'),
+          Pronouns: userProfile.get('Pronouns')?.get('Pronouns'),
+          Interest: userProfile.get('InterestedIn')?.get('InterestedIn'),
+          Location: userProfile.get('location'),
         },
       })
     }
@@ -182,7 +199,7 @@ export default function Page() {
                     <div>
                       <img
                         className="h-32 w-full object-cover lg:h-48"
-                        src={user.get('coverImg')}
+                        src={profile.coverImageUrl}
                         alt=""
                       />
                     </div>
@@ -191,14 +208,14 @@ export default function Page() {
                         <div className="flex">
                           <img
                             className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32"
-                            src={user.get('profileImg')}
+                            src={profile.profileImg}
                             alt=""
                           />
                         </div>
                         <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                           <div className="mt-6 min-w-0 flex-1 sm:hidden 2xl:block">
                             <h1 className="truncate text-2xl font-bold text-gray-900">
-                              {user.get('username')}
+                              {profile.name}
                             </h1>
                           </div>
                           <div className="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">

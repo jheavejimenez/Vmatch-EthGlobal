@@ -31,6 +31,8 @@ export default function PostForm(props) {
       document.getElementById('contentDescription').value
     const contentType = selected
     const contentPrice = document.getElementById('contentPrice').value
+    const contentTitle = document.getElementById('contentTitle').value
+    const contentUserImg = user.get('profileImg')
 
     let ipfsContent = ''
 
@@ -57,6 +59,9 @@ export default function PostForm(props) {
     content.set('contentDesc', contentDescription)
     content.set('contentType', selected)
     content.set('contentPrice', contentPrice)
+    content.set('contentTitle', contentTitle)
+    content.set('contentUserImg', contentUserImg)
+    content.set('handle', user.get('handle'))
     content.set('address', user.get('ethAddress'))
     content.save().then((object) => {
       alert('saved')
@@ -68,29 +73,25 @@ export default function PostForm(props) {
     <form className="mx-auto mt-24 flex w-full flex-col">
       <div className="space-y-2">
         <p className="text-lg font-bold">Upload Content</p>
+        <div className="sm:col-span-3">
+          <label
+            htmlFor="contentTitle"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Post Title
+          </label>
+          <div className="mt-1">
+            <input
+              type="text"
+              name="contentTitle"
+              id="contentTitle"
+              autoComplete="family-name"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
+          </div>
+        </div>
         <div>
           <div className="mt-4 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-            {/* <div className="sm:col-span-4">
-              <label
-                htmlFor="userName"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Username
-              </label>
-              <div className="mt-1 flex rounded-md shadow-sm">
-                <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
-                  profile/
-                </span>
-                <input
-                  type="text"
-                  name="userName"
-                  id="userName"
-                  autoComplete="username"
-                  className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-            </div> */}
-
             <div className="sm:col-span-6">
               <label
                 htmlFor="cover-photo"
