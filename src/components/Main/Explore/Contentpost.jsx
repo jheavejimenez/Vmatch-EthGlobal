@@ -87,8 +87,8 @@ export default function Contentpost(props) {
                 id="applicant-information-title"
                 className="flex flex-row text-lg font-medium leading-6 text-gray-900"
               >
-                Felix Prabitz
-                {props.data.get('contentUser')}
+                {/* Felix Prabitz */}
+                {props.data.get('handle')}
                 <CheckCircleIcon className="ml-1 h-3 text-green-600" />
               </div>
               <p className="mt-1 max-w-2xl text-sm text-gray-500">
@@ -129,8 +129,8 @@ export default function Contentpost(props) {
             <div className="mb-4">
               <img
                 className="h-full w-full object-cover"
-                src="https://images.unsplash.com/photo-1525130413817-d45c1d127c42?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1920&q=60&sat=-100"
-                // src={props.data.get('contentImg')}
+                // src="https://images.unsplash.com/photo-1525130413817-d45c1d127c42?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1920&q=60&sat=-100"
+                src={props.data.get('contentFile')}
                 alt=""
               />
             </div>

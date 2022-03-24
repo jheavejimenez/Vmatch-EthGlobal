@@ -33,15 +33,25 @@ export default function ViewPage() {
 
   const [userProfile, setUserProfile] = useState()
 
+  // if (id) {
+  //   const User = Moralis.Object.extend('_User')
+  //   const query = new Moralis.Query(User)
+  //   query.equalTo('handle', id)
+  //   let result = ''
+  //   query.first().then((result) => {
+  //     console.log(result)
+  //     console.log(id)
+  //     setUserProfile(result)
+  //   })
+  // }
+
   useEffect(() => {
     if (id) {
-      const User = Moralis.Object.extend('_User')
-      const query = new Moralis.Query(User)
-      query.equalTo('handle', id)
-      query.first().then((result) => {
-        console.log(result)
-        setUserProfile(result)
-        //   setLivepeerStreamObject(JSON.parse(user.get('stream')))
+      Moralis.Cloud.run('getProfile', { id: id }).then((results) => {
+        // matches.current = results
+        console.log(results)
+        setUserProfile(results)
+        // if (results.length > 0) setCurrentMatch([results[0]])
       })
     }
   }, [])
@@ -103,7 +113,8 @@ export default function ViewPage() {
         coverImageUrl: userProfile.get('coverImg'),
         about: userProfile.get('userbio'),
         fields: {
-          Name: userProfile.get('firstName') + ' ' + user.get('lastName'),
+          Name:
+            userProfile.get('firstName') + ' ' + userProfile.get('lastName'),
           Email: userProfile.get('email'),
           Pronouns: userProfile.get('Pronouns')?.get('Pronouns'),
           Interest: userProfile.get('InterestedIn')?.get('InterestedIn'),
@@ -111,7 +122,7 @@ export default function ViewPage() {
         },
       })
     }
-  }, [])
+  }, [userProfile])
 
   function handleMatch() {
     if (matched) {
@@ -122,9 +133,8 @@ export default function ViewPage() {
   }
 
   function handleVideoCall() {
-    if (user) {
-      alert('cant call yourself')
-    } else router.push('/videochat')
+    // alert('cant call yourself')
+    //execute call to other person
   }
 
   function handleMessage() {
@@ -208,7 +218,7 @@ export default function ViewPage() {
                         <div className="flex">
                           <img
                             className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32"
-                            src={profile.profileImg}
+                            src={profile.imageUrl}
                             alt=""
                           />
                         </div>
@@ -252,17 +262,6 @@ export default function ViewPage() {
                                 aria-hidden="true"
                               />
                               <span>Match</span>
-                            </button>
-                            <button
-                              type="button"
-                              className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none active:text-blue-500"
-                              onClick={handleEdit}
-                            >
-                              <PencilIcon
-                                className="-ml-1 mr-2 h-5 w-5 text-gray-400 "
-                                aria-hidden="true"
-                              />
-                              <span>Edit</span>
                             </button>
                           </div>
                         </div>
