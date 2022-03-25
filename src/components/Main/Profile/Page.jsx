@@ -12,6 +12,7 @@ import VideoJS from './VideoJS'
 import ContentProfile from './ContentProfile'
 import Followers from './Followers'
 import Following from './Following'
+import axios from 'axios'
 
 const tabs = [
   { name: 'Profile', href: '#', current: true },
@@ -148,11 +149,58 @@ export default function Page() {
   }
 
   useEffect(() => {
-    let livePeerObject = JSON.parse(user.get('stream'))
-    let url = `https://cdn.livepeer.com/hls/${livePeerObject.playbackId}/index.m3u8`
-    playbackRefURL.current = url
-    startPlayBack()
-  }, [])
+    if (user) {
+      if (user.get('stream') != undefined) {
+        let livePeerObject = JSON.parse(user.get('stream'))
+        let url = `https://cdn.livepeer.com/hls/${livePeerObject.playbackId}/index.m3u8`
+        playbackRefURL.current = url
+        startPlayBack()
+      } else {
+        let lpObect = {}
+        const instance = axios.create({
+          baseURL: 'https://livepeer.com/api/',
+
+          headers: {
+            Authorization: 'Bearer ' + process.env.REACT_APP_LIVEPEER_API_KEY,
+            'content-type': 'application/json',
+          },
+        })
+
+        const result = instance.post('/stream', {
+          name: user.get('handle'),
+          record: false,
+
+          profiles: [
+            {
+              name: '720p',
+              bitrate: 2000000,
+              fps: 30,
+              width: 1280,
+              height: 720,
+            },
+            {
+              name: '480p',
+              bitrate: 1000000,
+              fps: 30,
+              width: 854,
+              height: 480,
+            },
+            {
+              name: '360p',
+              bitrate: 500000,
+              fps: 30,
+              width: 640,
+              height: 360,
+            },
+          ],
+        })
+        result.then(async function (resp) {
+          user.set('stream', JSON.stringify(resp.data))
+          user.save()
+        })
+      }
+    }
+  }, [user])
 
   //Start Play back of stream when it has started
   function startPlayBack() {
@@ -213,7 +261,7 @@ export default function Page() {
                               <span>Message</span>
                             </button>
                             <button
-                              type="button" 
+                              type="button"
                               className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
                               onClick={handleVideoCall}
                             >
@@ -224,7 +272,7 @@ export default function Page() {
                               <span>Video Call</span>
                             </button>
                             <button
-                              type="button" 
+                              type="button"
                               className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
                               onClick={handleMatch}
                             >
@@ -363,7 +411,6 @@ export default function Page() {
                     hidden={selectedTab != 'Following'}
                     className="mx-auto mt-8 max-w-5xl px-4 pb-4 sm:px-6 lg:px-8"
                   >
-                    
                     <Following />
                   </div>
                 </article>

@@ -5058,6 +5058,13 @@
   "resolved" "https://registry.npmjs.org/isstream/-/isstream-0.1.2.tgz"
   "version" "0.1.2"
 
+"javascript-time-ago@^2.3.13":
+  "integrity" "sha512-LiNqRLERXpePGLejdqjbxfMkFlwx+2RDz21Jfw/3l2mH20fTa6nAtwOFQmAK5l0SfaV7HvixJgTCxyph9VmG1Q=="
+  "resolved" "https://registry.npmjs.org/javascript-time-ago/-/javascript-time-ago-2.3.13.tgz"
+  "version" "2.3.13"
+  dependencies:
+    "relative-time-format" "^1.0.7"
+
 "jayson@^3.4.4":
   "integrity" "sha512-f71uvrAWTtrwoww6MKcl9phQTC+56AopLyEenWvKVAIMz+q0oVGj6tenLZ7Z6UiPBkJtKLj4kt0tACllFQruGQ=="
   "resolved" "https://registry.npmjs.org/jayson/-/jayson-3.6.6.tgz"
@@ -6535,7 +6542,7 @@
   "resolved" "https://registry.npmjs.org/react-country-dropdown/-/react-country-dropdown-1.0.4.tgz"
   "version" "1.0.4"
 
-"react-dom@*", "react-dom@^0.14.0 || ^15.0.0 || ^16 || ^17", "react-dom@^16 || ^17 || ^18", "react-dom@^16.8.0  || ^17.0.0", "react-dom@^16.8.0 || ^17.0.0", "react-dom@^17.0.1", "react-dom@^17.0.2", "react-dom@^17.0.2 || ^18.0.0-0", "react-dom@>= 16.8.0", "react-dom@>=16.6.0", "react-dom@>=17.0.0", "react-dom@~16":
+"react-dom@*", "react-dom@^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0", "react-dom@^0.14.0 || ^15.0.0 || ^16 || ^17", "react-dom@^16 || ^17 || ^18", "react-dom@^16.8.0  || ^17.0.0", "react-dom@^16.8.0 || ^17.0.0", "react-dom@^17.0.1", "react-dom@^17.0.2", "react-dom@^17.0.2 || ^18.0.0-0", "react-dom@>= 16.8.0", "react-dom@>=16.6.0", "react-dom@>=17.0.0", "react-dom@~16":
   "integrity" "sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-17.0.2.tgz"
   "version" "17.0.2"
@@ -6597,6 +6604,13 @@
   "integrity" "sha512-FNbLuG/HAdapQoybeZSoes1PWdOj0w242gb+e1R0hicf3Gyj/Mf8M9NaED2AnXVOX01b2FXomwUiw1xP1K+8sA=="
   "resolved" "https://registry.npmjs.org/react-native-crypto-js/-/react-native-crypto-js-1.0.0.tgz"
   "version" "1.0.0"
+
+"react-number-format@^4.9.1":
+  "integrity" "sha512-v49XqXv7SpwYZKGkghNJjoDUr6lIUozlPLrObcxre7GfcLx7qD4TCvArn3GozN/Y4FVbLyEYCwJoBCiChdBh5A=="
+  "resolved" "https://registry.npmjs.org/react-number-format/-/react-number-format-4.9.1.tgz"
+  "version" "4.9.1"
+  dependencies:
+    "prop-types" "^15.7.2"
 
 "react-qr-code@^2.0.3":
   "integrity" "sha512-6GDH0l53lksf2JgZwwcoS0D60a1OAal/GQRyNFkMBW19HjSqvtD5S20scmSQsKl+BgWM85Wd5DCcUYoHd+PZnQ=="
@@ -6668,7 +6682,7 @@
     "ts-easing" "^0.2.0"
     "tslib" "^2.1.0"
 
-"react@*", "react@^0.14.0 || ^15.0.0 || ^16 || ^17", "react@^15.5.3 || ^16.0.0 || ^17.0.0", "react@^16 || ^17 || ^18", "react@^16.0.0", "react@^16.8.0  || ^17.0.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.0 || ^17.0.1", "react@^16.x || ^17.x", "react@^17.0.1", "react@^17.0.2", "react@^17.0.2 || ^18.0.0-0", "react@>= 16", "react@>= 16.8.0", "react@>= 16.8.0 || 17.x.x || 18.x.x", "react@>=16", "react@>=16.13.1", "react@>=16.6.0", "react@>=16.8.0", "react@>=17", "react@>=17.0.0", "react@~16", "react@17.0.2":
+"react@*", "react@^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0", "react@^0.14.0 || ^15.0.0 || ^16 || ^17", "react@^15.5.3 || ^16.0.0 || ^17.0.0", "react@^16 || ^17 || ^18", "react@^16.0.0", "react@^16.8.0  || ^17.0.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.0 || ^17.0.1", "react@^16.x || ^17.x", "react@^17.0.1", "react@^17.0.2", "react@^17.0.2 || ^18.0.0-0", "react@>= 16", "react@>= 16.8.0", "react@>= 16.8.0 || 17.x.x || 18.x.x", "react@>=16", "react@>=16.13.1", "react@>=16.6.0", "react@>=16.8.0", "react@>=17", "react@>=17.0.0", "react@~16", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
   "version" "17.0.2"
@@ -6826,6 +6840,11 @@
   "integrity" "sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA=="
   "resolved" "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz"
   "version" "0.13.9"
+
+"relative-time-format@^1.0.7":
+  "integrity" "sha512-BoLPaoL5y94ngPI4iJ9mNHqRS8NA+Hjs6oYHL5UYkbnA7/iTlvJiMoQQt8txhHhc+Y3e6yXWhwTAKvsQhnx2yg=="
+  "resolved" "https://registry.npmjs.org/relative-time-format/-/relative-time-format-1.0.7.tgz"
+  "version" "1.0.7"
 
 "request@^2.85.0":
   "integrity" "sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw=="

@@ -1,7 +1,8 @@
-import { XIcon } from '@heroicons/react/outline'
+import { CashIcon, XIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
 import { Router, useRouter } from 'next/router'
 import { useMoralis } from 'react-moralis'
+import NumberFormat from 'react-number-format'
 
 export default function PostContainer(props) {
   const { user } = useMoralis()
@@ -23,12 +24,15 @@ export default function PostContainer(props) {
         />
         <div className="ml-8 flex flex-col">
           <div className="font-bold">{props.data.get('contentTitle')}</div>
-          <div className="text-sm">Post Description</div>
+          <div className="text-sm">{props.data.get('contentDesc')}</div>
         </div>
-        <XIcon
-          onClick={deleteMessage}
-          className="h-5 cursor-pointer text-red-500"
-        />
+        <CashIcon onClick={deleteMessage} className="h-5 text-green-500" />
+        <NumberFormat
+          value={20}
+          displayType={'text'}
+          thousandSeparator={true}
+          prefix={'MATIC '}
+        />{' '}
       </div>
     </div>
   )

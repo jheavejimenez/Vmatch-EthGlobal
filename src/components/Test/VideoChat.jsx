@@ -27,7 +27,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function VideoChat() {
   const router = useRouter()
   const { id } = router.query
   const { user, Moralis } = useMoralis()
@@ -35,50 +35,56 @@ export default function Example() {
   const videoCallRef = useRef(null)
   const [height, setHeight] = useState(DEFAULT_HEIGHT)
   const [callframe, setCallframe] = useState(null)
-  
-  const [gotFromUserIsFollowing,setGotFromUserIsFollowing] = useState(false);
-  const [followingFrom,setFollowingFrom] = useState();
-  const [followingTo,setFollowingTo]  = useState();
-  const [gotToUserIsFollowing,setGotToUserIsFollowing]  = useState(false);
 
-useEffect(()=>{
-  setWindow(window);
-},[])
- //Get if the "from" user is Following the "to" user
- //There are two pointers found in the video chat Class
- //"from"  points to a user object. This is the user that initiates the chat
-  useEffect(()=>{
-     async function getUserFollow()
-     {
-      console.log(`${vchat.get("from").get("ethAddress")} ${vchat.get("to").get("profileId")}`)
-        const result = await isFollowing(vchat.get("from").get("ethAddress"),vchat.get("to").get("profileId"));
-        setFollowingFrom(result);
-        setGotFromUserIsFollowing(true);
-     }
-     
-     if(vchat)
-     getUserFollow();
-  },[vchat])
+  const [gotFromUserIsFollowing, setGotFromUserIsFollowing] = useState(false)
+  const [followingFrom, setFollowingFrom] = useState()
+  const [followingTo, setFollowingTo] = useState()
+  const [gotToUserIsFollowing, setGotToUserIsFollowing] = useState(false)
 
+  useEffect(() => {
+    setWindow(window)
+  }, [])
+  //Get if the "from" user is Following the "to" user
+  //There are two pointers found in the video chat Class
+  //"from"  points to a user object. This is the user that initiates the chat
+  useEffect(() => {
+    async function getUserFollow() {
+      console.log(
+        `${vchat.get('from').get('ethAddress')} ${vchat
+          .get('to')
+          .get('profileId')}`
+      )
+      const result = await isFollowing(
+        vchat.get('from').get('ethAddress'),
+        vchat.get('to').get('profileId')
+      )
+      setFollowingFrom(result)
+      setGotFromUserIsFollowing(true)
+    }
 
+    if (vchat) getUserFollow()
+  }, [vchat])
 
- //Get if the "to" user is Following the "from" user
- //There are two pointers found in the video chat Class
- //"to"  points to a user object. This is the user that was invited to chat
- useEffect(()=>{
-  async function getUserFollow()
-  {
-    console.log(`${vchat.get("to").get("ethAddress")} ${vchat.get("from").get("profileId")}`)
-    const result = await isFollowing(vchat.get("to").get("ethAddress"),vchat.get("from").get("profileId"));
-    setFollowingTo(result);
-    setGotToUserIsFollowing(true);
-  }
-  
-  if(vchat)
-  getUserFollow();
-},[vchat])
+  //Get if the "to" user is Following the "from" user
+  //There are two pointers found in the video chat Class
+  //"to"  points to a user object. This is the user that was invited to chat
+  useEffect(() => {
+    async function getUserFollow() {
+      console.log(
+        `${vchat.get('to').get('ethAddress')} ${vchat
+          .get('from')
+          .get('profileId')}`
+      )
+      const result = await isFollowing(
+        vchat.get('to').get('ethAddress'),
+        vchat.get('from').get('profileId')
+      )
+      setFollowingTo(result)
+      setGotToUserIsFollowing(true)
+    }
 
-
+    if (vchat) getUserFollow()
+  }, [vchat])
 
   useEffect(() => {
     if (!videoCallRef || !videoCallRef?.current || callframe) return
@@ -110,39 +116,26 @@ useEffect(()=>{
     getVideoChat()
   }, [user])
 
- const toggleFollowFromUser = async() =>
- {
-    if(followingFrom==false)
-    {
-        const result = await follow(vchat.get("from").get("profileId"));
-        setFollowingFrom(true);
+  const toggleFollowFromUser = async () => {
+    if (followingFrom == false) {
+      const result = await follow(vchat.get('from').get('profileId'))
+      setFollowingFrom(true)
+    } else {
+      const result = await unfollow(vchat.get('from').get('profileId'))
+      setFollowingFrom(false)
     }
-    else
-    {
+  }
 
-      const result = await unfollow(vchat.get("from").get("profileId"));
-      setFollowingFrom(false);
+  const toggleFollowToUser = async () => {
+    if (followingTo == false) {
+      const result = await follow(vchat.get('to').get('profileId'))
 
+      setFollowingTo(true)
+    } else {
+      const result = await unfollow(vchat.get('to').get('profileId'))
+      setFollowingTo(false)
     }
- }
-
- const toggleFollowToUser = async() =>
- {
-  if(followingTo==false)
-  {
-     const result = await follow(vchat.get("to").get("profileId"));
-
-
-     setFollowingTo(true);
   }
-  else
-  {
-
-    const result = await unfollow(vchat.get("to").get("profileId"));
-    setFollowingTo(false);
-
-  }
- }
 
   return (
     <div className="bg-white">
@@ -166,15 +159,31 @@ useEffect(()=>{
                   ></div>
 
                   <div className="flex h-max flex-row items-start justify-between px-4">
-                    <button onClick={toggleFollowFromUser} disabled={!gotFromUserIsFollowing || vchat.get("to").get("ethAddress") != user.get("ethAddress") } className={ `${gotFromUserIsFollowing ==true ? (followingFrom == true ? "text-red-400": "text-gray-400") : "text-gray-400" }` } >
-                      <HeartIcon className="h-10 rounded-full bg-white p-2" />
-                    </button>
-                    <p className="text-sm text-white">
+                    {/* <button
+                      onClick={toggleFollowFromUser}
+                      disabled={
+                        !gotFromUserIsFollowing ||
+                        vchat.get('to').get('ethAddress') !=
+                          user.get('ethAddress')
+                      }
+                      className={`${
+                        gotFromUserIsFollowing == true
+                          ? followingFrom == true
+                            ? 'text-red-400'
+                            : 'text-gray-400'
+                          : 'text-gray-400'
+                      }`}
+                    >
+                      <HeartIcon className="h-8 rounded-full bg-white p-2" />
+                    </button> */}
+                    <p className="whitespace-nowrap text-sm text-white">
                       {vchat
-                        ? user.get('firstName') + ' ' + user.get('lastName')
+                        ? vchat.get('from').get('firstName') +
+                          ' ' +
+                          vchat.get('from').get('lastName')
                         : 'Name'}
                     </p>
-                    <p className="text-sm text-white">
+                    <p className="whitespace-nowrap text-sm text-white">
                       {vchat
                         ? vchat.get('to').get('firstName') +
                           ' ' +
@@ -182,9 +191,23 @@ useEffect(()=>{
                         : 'Name'}
                     </p>
 
-                    <button onClick={toggleFollowToUser} disabled={!gotFromUserIsFollowing || vchat.get("from").get("ethAddress") != user.get("ethAddress") } className={ `${gotToUserIsFollowing ==true ? (followingTo == true ? "text-red-400": "text-gray-400") : "text-gray-400" }` } >
-                      <HeartIcon className="h-10 rounded-full bg-white p-2" />
-                    </button>
+                    {/* <button
+                      onClick={toggleFollowToUser}
+                      disabled={
+                        !gotFromUserIsFollowing ||
+                        vchat.get('from').get('ethAddress') !=
+                          user.get('ethAddress')
+                      }
+                      className={`${
+                        gotToUserIsFollowing == true
+                          ? followingTo == true
+                            ? 'text-red-400'
+                            : 'text-gray-400'
+                          : 'text-gray-400'
+                      }`}
+                    >
+                      <HeartIcon className="h-8 rounded-full bg-white p-2" />
+                    </button> */}
                   </div>
                 </div>
               </div>
