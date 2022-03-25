@@ -24,7 +24,7 @@ export default function Explore() {
       <div className="fixed z-40 flex w-2/12">
         <Dashboard />
       </div>
-      <div className="relative flex h-max w-full flex-col items-center bg-white">
+      <div className="relative flex h-max w-full flex-col items-center">
         <div className="flex flex-col items-center justify-center">
           <main className="relative flex-1 overflow-y-auto focus:outline-none xl:order-last">
             {!postContent && !videoContent ? (
