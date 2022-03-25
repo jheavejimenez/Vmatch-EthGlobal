@@ -5,41 +5,39 @@ import {
   ChipIcon,
   GlobeAltIcon,
   VideoCameraIcon,
+  DesktopComputerIcon,
 } from '@heroicons/react/solid'
 
 const features = [
   {
     name: 'Lens Protocol',
-    description:
-      'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi vitae lobortis.',
+    description: 'Profile IDs, Social Media Functionality',
     icon: GlobeAltIcon,
   },
   {
     name: 'Livepeer',
-    description:
-      'Go Live on the homefeed, or chat with your matches. Get verified by other Users!',
+    description: 'Public Livestreams & private Livechat with matches',
     icon: VideoCameraIcon,
   },
   {
-    name: 'Chainlink',
-    description:
-      'Chainlink Keepers to track the deadine for verification, Keepers to track paid content, Randomizer for results on matching page',
+    name: 'Polygon',
+    description: 'Fees & payment medium for content/tips',
     icon: ChipIcon,
   },
   {
     name: 'Moralis',
-    description: 'Backend and data management.',
+    description: 'Backend & data management',
     icon: DatabaseIcon,
   },
   {
-    name: 'NextJS & Tailwind CSS',
-    description: 'Frontend techstack.',
+    name: 'NextJS',
+    description: 'Frontend',
     icon: CogIcon,
   },
   {
-    name: 'Polygon',
-    description: 'Fees & payment medium for content & tips',
-    icon: CashIcon,
+    name: 'Tailwind Css',
+    description: 'Frontend',
+    icon: DesktopComputerIcon,
   },
 ]
 
@@ -55,9 +53,7 @@ export default function Feature() {
             Tech Stack for this Application
           </p>
           <p className="mx-auto mt-5 max-w-prose text-xl text-gray-500">
-            These are the protocols and services we are using for VMatch. All
-            are sponsors of the LFGrow Hackathon except Moralis, NextJs &
-            Tailwind Css.
+            These are the protocols and services we are using for VMatch.
           </p>
           <div className="mt-12">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">

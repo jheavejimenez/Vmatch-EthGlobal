@@ -7,6 +7,7 @@ import { createProfile } from '../../../lenspro/createprofile'
 import { getAuthenticationToken } from '../../../lenspro/state'
 import { getAddressFromSigner } from '../../../lenspro/ethers-service'
 import { profiles } from '../../../lenspro/profile'
+import { setWindow } from '../../../lenspro/ethers-service'
 import { updateProfile } from '../../../lenspro/updateprofile'
 
 export default function ProfileForm(props) {
@@ -30,6 +31,9 @@ export default function ProfileForm(props) {
   const [lastName, setLastName] = useState(user.get('lastName'))
   const [email, setEmail] = useState(user.get('email'))
   const [userName, setUserName] = useState(user.get('username'))
+
+  const [profileID, setProfileID] = useState()
+
   //disable cancel button
   const [profileHandle, setProfileHandle] = useState()
   useEffect(() => {
@@ -79,12 +83,16 @@ export default function ProfileForm(props) {
 
   useEffect(() => {
     async function checkUser() {
+      setWindow(window)
       const address = await getAddressFromSigner()
       console.log(address)
       const profile = await profiles({ ownedBy: [address] })
       console.log(profile.profiles.items)
+      alert('hell2')
+      alert(JSON.stringify(profile.profiles))
       if (profile.profiles.items.length > 0) {
         user.set('profileId', profile.profiles.items[0].id)
+        user.save()
       }
     }
     if (user && user.get('profileId') == undefined) checkUser()
@@ -158,13 +166,14 @@ export default function ProfileForm(props) {
     }
 
     if (user.get('profileId') == undefined) {
+      alert('check')
       createProfile(createProfileRequest).then(
         (result) => {
           if (result.data.createProfile.reason == 'HANDLE_TAKEN')
             alert(JSON.stringify(result))
-
+          setProfileID(result)
           console.log(result)
-          console.log('its thiS')
+          alert(result)
         },
         (err) => {
           console.log('Error')
@@ -188,6 +197,7 @@ export default function ProfileForm(props) {
     user.set('location', location)
     user.set('InterestedIn', int)
     user.set('Pronouns', pro)
+    user.set('profileId', profileID)
     //saving
     user.save().then((object) => {
       alert('saved')

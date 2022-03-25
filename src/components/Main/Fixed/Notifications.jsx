@@ -39,12 +39,17 @@ export default function Dashboard() {
 
   //Query initial Notifications
   useEffect(() => {
+    // if (user) {
+    //   const Notification = Moralis.Object.extend('Notification')
+    //   const query = new Moralis.Query(Notification)
+    //   query.equalTo('to', user)
+    //   query.descending('createdAt')
+    //   query.find().then((results) => {
+
+    //   })
+    // }
     if (user) {
-      const Notification = Moralis.Object.extend('Notification')
-      const query = new Moralis.Query(Notification)
-      query.equalTo('to', user)
-      query.descending('createdAt')
-      query.find().then((results) => {
+      Moralis.Cloud.run('getNotifications', { id: user.id }).then((results) => {
         console.log(results)
         setAlerts(results)
       })

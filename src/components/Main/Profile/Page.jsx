@@ -13,6 +13,7 @@ import ContentProfile from './ContentProfile'
 import Followers from './Followers'
 import Following from './Following'
 import axios from 'axios'
+import { setWindow } from '../../../lenspro/ethers-service'
 
 const tabs = [
   { name: 'Profile', href: '#', current: true },
@@ -116,10 +117,13 @@ export default function Page() {
   }
 
   const handleEdit = () => {
+    setWindow(window)
     if (!editModal) {
       setEditModal(true)
+      setWindow(window)
     } else if (editModal) {
       setEditModal(false)
+      setWindow(window)
     }
   }
 
@@ -128,6 +132,7 @@ export default function Page() {
       const handle = user.get('handle')
       if (handle == undefined) {
         setEditModal(true)
+        setWindow(window)
       }
     }
   }, [])
@@ -167,7 +172,7 @@ export default function Page() {
         })
 
         const result = instance.post('/stream', {
-          name: user.get('handle'),
+          name: user.get('username'),
           record: false,
 
           profiles: [
@@ -197,6 +202,10 @@ export default function Page() {
         result.then(async function (resp) {
           user.set('stream', JSON.stringify(resp.data))
           user.save()
+          let livePeerObject = JSON.parse(user.get('stream'))
+          let url = `https://cdn.livepeer.com/hls/${livePeerObject.playbackId}/index.m3u8`
+          playbackRefURL.current = url
+          startPlayBack()
         })
       }
     }
@@ -208,11 +217,13 @@ export default function Page() {
 
     setTimeout(function () {
       //delay to ensure the stream is actually ready.
-      playerRef.current.src({
-        type: 'application/x-mpegURL',
-        src: playbackRefURL.current,
-      })
-      playerRef.current.play()
+      if (playerRef.current != null) {
+        playerRef.current.src({
+          type: 'application/x-mpegURL',
+          src: playbackRefURL.current,
+        })
+        playerRef.current.play()
+      }
     }, delayInMilliseconds)
   }
 

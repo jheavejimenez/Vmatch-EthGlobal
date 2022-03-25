@@ -5,8 +5,14 @@ import { useMoralis } from 'react-moralis'
 import axios from 'axios'
 import { Transition } from '@headlessui/react'
 import { useTimeoutFn } from 'react-use'
-import { isFollowing,follow } from '../../../lenspro/lenspro'
+import { isFollowing } from '../../../lenspro/lenspro'
+import { follow } from '../../../lenspro/follow'
 import { sendNotification } from '../Fixed/sendnotifications'
+import {
+  setWindow,
+  getAddressFromSigner,
+} from '../../../lenspro/ethers-service'
+
 export default function Example() {
   const router = useRouter()
   const [match, setMatch] = useState(true)
@@ -32,8 +38,6 @@ export default function Example() {
 
   function matchDenied() {
     //not matched, show next
-    
-    
     if (matches.current.length > 0) {
       matches.current.splice(0, 1)
       if (matches.current.length > 0) setCurrentMatch([matches.current[0]])
@@ -42,22 +46,31 @@ export default function Example() {
     setIsShowing(false)
     resetIsShowing()
   }
-
   async function matchAccepted() {
-    
     // MATCHED, show next
-    if(currentMatch[0].get("profile")!= undefined)
-    if(!isFollowing(user.get("ethAddress"),currentMatch[0].get("profileId")) )
-    {
-       follow(currentMatch[0].get("profileId"));
-       sendNotification(currentMatch[0].id,"follow","","Followed you.",user,Moralis);
-    }
+    setWindow(window)
+    const address = await getAddressFromSigner()
+    const following = await isFollowing(
+      address,
+      currentMatch[0].get('profileId')
+    )
+    if (currentMatch[0].get('profileId') != undefined)
+      if (!following) {
+        alert('is not following')
+        follow(currentMatch[0].get('profileId'), window)
+        sendNotification(
+          currentMatch[0].id,
+          'follow',
+          '',
+          'Followed you.',
+          user,
+          Moralis
+        )
+      }
 
     if (matches.current.length > 0) {
       matches.current.splice(0, 1)
-      if (matches.current.length > 0)
-      
-      setCurrentMatch([matches.current[0]])
+      if (matches.current.length > 0) setCurrentMatch([matches.current[0]])
       else setCurrentMatch([])
     }
 
@@ -115,8 +128,15 @@ export default function Example() {
           videochat.set('to', currentMatch[0])
           videochat.set('live', false)
           videochat.save().then((object) => {
-            sendNotification(currentMatch[0].id,"chat request",object.id,"Sent a video chat request.",user,Moralis);
-   
+            sendNotification(
+              currentMatch[0].id,
+              'chat request',
+              object.id,
+              'Sent a video chat request.',
+              user,
+              Moralis
+            )
+
             router.push(`/videochat/${object.id}`)
           })
         })
@@ -129,8 +149,15 @@ export default function Example() {
       videochat.set('live', false)
 
       videochat.save().then((object) => {
-        sendNotification(currentMatch[0].id,"chat request",object.id,"Sent a video chat request.",user,Moralis);
-   
+        sendNotification(
+          currentMatch[0].id,
+          'chat request',
+          object.id,
+          'Sent a video chat request.',
+          user,
+          Moralis
+        )
+
         router.push(`/videochat/${object.id}`)
       })
     }

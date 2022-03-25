@@ -100,7 +100,7 @@ export default function Footer() {
             <div className="space-y-8 xl:col-span-1">
               <img
                 className="h-10"
-                src="https://tailwindui.com/img/logos/workflow-mark-gray-300.svg"
+                src="/vmatch-gradient.svg"
                 alt="Company name"
               />
               <p className="text-base text-gray-500">
