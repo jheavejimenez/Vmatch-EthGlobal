@@ -77,6 +77,7 @@ export default function Main() {
     if (user) {
       const Content = Moralis.Object.extend('Content')
       const query = new Moralis.Query(Content)
+      query.descending('createdAt')
       query.find().then((results) => {
         let result = []
         results.forEach((content) => {
