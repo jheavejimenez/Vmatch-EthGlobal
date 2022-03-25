@@ -1,11 +1,13 @@
-import { HeartIcon, PhoneMissedCallIcon } from '@heroicons/react/solid'
+import { HeartIcon } from '@heroicons/react/solid'
 import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useMoralis } from 'react-moralis'
-import { Client } from '@livepeer/webrtmp-sdk'
-
+import { isFollowing } from '../../lenspro/lenspro'
+import { follow } from '../../lenspro/follow'
+import { unfollow } from '../../lenspro/unfollow'
 import DailyIframe from '@daily-co/daily-js'
 import styled from 'styled-components'
+import { setWindow } from '../../lenspro/ethers-service'
 const CALL_OPTIONS = {
   iframeStyle: {
     width: '100%',
@@ -21,20 +23,62 @@ const CALL_OPTIONS = {
 
 const DEFAULT_HEIGHT = 400
 
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
 export default function Example() {
   const router = useRouter()
   const { id } = router.query
   const { user, Moralis } = useMoralis()
   const [vchat, setVideoChat] = useState()
-  const videoRef = useRef(null)
   const videoCallRef = useRef(null)
   const [height, setHeight] = useState(DEFAULT_HEIGHT)
   const [callframe, setCallframe] = useState(null)
-  const stream = useRef(null)
-  const clientRef = useRef(null)
-  const sessionRef = useRef(null)
-  const [livepeerStreamObject, setLivepeerStreamObject] = useState()
-  const [isLive, setIsLive] = useState(false)
+  
+  const [gotFromUserIsFollowing,setGotFromUserIsFollowing] = useState(false);
+  const [followingFrom,setFollowingFrom] = useState();
+  const [followingTo,setFollowingTo]  = useState();
+  const [gotToUserIsFollowing,setGotToUserIsFollowing]  = useState(false);
+
+useEffect(()=>{
+  setWindow(window);
+},[])
+ //Get if the "from" user is Following the "to" user
+ //There are two pointers found in the video chat Class
+ //"from"  points to a user object. This is the user that initiates the chat
+  useEffect(()=>{
+     async function getUserFollow()
+     {
+      console.log(`${vchat.get("from").get("ethAddress")} ${vchat.get("to").get("profileId")}`)
+        const result = await isFollowing(vchat.get("from").get("ethAddress"),vchat.get("to").get("profileId"));
+        setFollowingFrom(result);
+        setGotFromUserIsFollowing(true);
+     }
+     
+     if(vchat)
+     getUserFollow();
+  },[vchat])
+
+
+
+ //Get if the "to" user is Following the "from" user
+ //There are two pointers found in the video chat Class
+ //"to"  points to a user object. This is the user that was invited to chat
+ useEffect(()=>{
+  async function getUserFollow()
+  {
+    console.log(`${vchat.get("to").get("ethAddress")} ${vchat.get("from").get("profileId")}`)
+    const result = await isFollowing(vchat.get("to").get("ethAddress"),vchat.get("from").get("profileId"));
+    setFollowingTo(result);
+    setGotToUserIsFollowing(true);
+  }
+  
+  if(vchat)
+  getUserFollow();
+},[vchat])
+
+
 
   useEffect(() => {
     if (!videoCallRef || !videoCallRef?.current || callframe) return
@@ -60,66 +104,45 @@ export default function Example() {
         query.first().then((result) => {
           console.log(result)
           setVideoChat(result)
-          setLivepeerStreamObject(JSON.parse(user.get('stream')))
         })
       }
     }
     getVideoChat()
   }, [user])
 
-  const streamButtonClicked = async () => {
-    if (!isLive) {
-      videoRef.current.volume = 0
-
-      stream.current = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      })
-      if (!stream.current) {
-        /* setOpenNotification(true);
-         setNotificationHeader("ERROR LOADING MEDIA DEVICE")
-         setNotificationBody("Your stream cannot be started.");
-         setNotificationType(2); //Error
-         setEventNotFound(true);
-         */
-        return
-      }
-
-      videoRef.current.srcObject = stream.current
-      videoRef.current.play()
-      clientRef.current = new Client({
-        opt: { baseUrl: 'nyc-rtmp.livepeer.com/live' },
-      })
-      sessionRef.current = clientRef.current.cast(
-        stream.current,
-        livepeerStreamObject.streamKey
-      )
-
-      sessionRef.current.on('open', () => {
-        console.log('Stream started.')
-      })
-
-      sessionRef.current.on('close', () => {
-        console.log('Stream stopped.')
-      })
-
-      sessionRef.current.on('error', (err) => {
-        console.log('Stream error.', err.message)
-      })
-      setIsLive(true)
-    } else {
-      if (videoRef.current) {
-        videoRef.current.pause()
-
-        stream.current.getTracks().forEach(function (track) {
-          track.stop()
-        })
-        videoRef.current.srcObject = null
-        stream.current = null
-      }
-      setIsLive(false)
+ const toggleFollowFromUser = async() =>
+ {
+    if(followingFrom==false)
+    {
+        const result = await follow(vchat.get("from").get("profileId"));
+        setFollowingFrom(true);
     }
+    else
+    {
+
+      const result = await unfollow(vchat.get("from").get("profileId"));
+      setFollowingFrom(false);
+
+    }
+ }
+
+ const toggleFollowToUser = async() =>
+ {
+  if(followingTo==false)
+  {
+     const result = await follow(vchat.get("to").get("profileId"));
+
+
+     setFollowingTo(true);
   }
+  else
+  {
+
+    const result = await unfollow(vchat.get("to").get("profileId"));
+    setFollowingTo(false);
+
+  }
+ }
 
   return (
     <div className="bg-white">
@@ -143,8 +166,8 @@ export default function Example() {
                   ></div>
 
                   <div className="flex h-max flex-row items-start justify-between px-4">
-                    <button className="" onClick={streamButtonClicked}>
-                      <HeartIcon className="h-10 rounded-full bg-white p-2 " />
+                    <button onClick={toggleFollowFromUser} disabled={!gotFromUserIsFollowing || vchat.get("to").get("ethAddress") != user.get("ethAddress") } className={ `${gotFromUserIsFollowing ==true ? (followingFrom == true ? "text-red-400": "text-gray-400") : "text-gray-400" }` } >
+                      <HeartIcon className="h-10 rounded-full bg-white p-2" />
                     </button>
                     <p className="text-sm text-white">
                       {vchat
@@ -159,8 +182,8 @@ export default function Example() {
                         : 'Name'}
                     </p>
 
-                    <button>
-                      <HeartIcon className="h-10 rounded-full bg-white p-2 " />
+                    <button onClick={toggleFollowToUser} disabled={!gotFromUserIsFollowing || vchat.get("from").get("ethAddress") != user.get("ethAddress") } className={ `${gotToUserIsFollowing ==true ? (followingTo == true ? "text-red-400": "text-gray-400") : "text-gray-400" }` } >
+                      <HeartIcon className="h-10 rounded-full bg-white p-2" />
                     </button>
                   </div>
                 </div>

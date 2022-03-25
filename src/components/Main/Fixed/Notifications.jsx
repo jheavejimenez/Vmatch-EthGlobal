@@ -4,91 +4,106 @@ import {
   UserIcon,
   UsersIcon,
 } from '@heroicons/react/outline'
-
-/* This example requires Tailwind CSS v2.0+ */
-const people = [
-  {
-    name: 'Lindsay Walton',
-    imageUrl:
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80',
-  },
-  {
-    name: 'Max Walton',
-    imageUrl:
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80',
-  },
-  {
-    name: 'The Graph Walton',
-    imageUrl:
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80',
-  },
-  {
-    name: 'Livepeer Walton',
-    imageUrl:
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80',
-  },
-  // More people...
-]
-const activityItems = [
-  {
-    id: 1,
-    person: people[0],
-    project: 'Workcation',
-    commit: '2d89f0c8',
-    environment: 'production',
-    time: '1h',
-  },
-  {
-    id: 2,
-    person: people[1],
-    project: 'Workcation',
-    commit: '2d89f0c8',
-    environment: 'production',
-    time: '1h',
-  },
-  {
-    id: 3,
-    person: people[2],
-    project: 'Workcation',
-    commit: '2d89f0c8',
-    environment: 'production',
-    time: '1h',
-  },
-  // More items...
-]
+import { useMoralis } from 'react-moralis'
+import { useEffect, useState,useRef,Fragment } from 'react'
+import { useRouter } from 'next/router'
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en.json'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
+TimeAgo.addLocale(en)
 
 export default function Dashboard() {
+  const { Moralis, user } = useMoralis();
+  const [alerts,setAlerts] = useState([]);
+  const subscribeToNotifications = useRef();
+  const router = useRouter();
+  const timeAgo = new TimeAgo('en-US')
+
+  //Live Query for Notifications
+  useEffect(()=>{
+
+
+    async function getNotifications(){
+      const Notification = Moralis.Object.extend("Notification");
+      const query = new Moralis.Query(Notification);
+     // query.equalTo("to",user);
+      query.descending("createAt");
+      subscribeToNotifications.current = await query.subscribe();
+      subscribeToNotifications.current.on('create', (object) => {
+    
+      });
+
+    }
+   if(user)
+     getNotifications();
+
+     return function cleanup()
+     {
+       if(subscribeToNotifications.current)
+         subscribeToNotifications.current.unsubscribe();
+ 
+        
+      }
+  },[user])
+
+  //Query initial Notifications
+  useEffect(()=>{
+     if(user)
+     {
+      const Notification = Moralis.Object.extend("Notification");
+      const query = new Moralis.Query(Notification);
+     // query.equalTo("to",user);
+      query.descending("createAt");
+      query.find().then((results)=>{
+         console.log(results)
+         setAlerts(results)
+      })
+  
+     }
+
+    
+ 
+  },[user])
+  const viewNotification  =  async (n) =>
+  {
+      if(n.get("actionId") !="" && n.get("action") == "chat request")
+      {
+        router.push(`/videochat/${n.get("actionid")}`)
+
+      }
+  }
+
   return (
     <div className="flex h-screen min-h-0 flex-1 flex-col bg-gray-800">
       <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
         <div className="mt-16 flex flex-col items-center justify-center text-white">
           <h1 className="text-lg">Notifications</h1>
           <ul role="list" className="mx-4 divide-y divide-gray-200">
-            {activityItems.map((activityItem) => (
-              <li key={activityItem.id} className="py-4">
+            {alerts.map((activityItem) => (
+              <li key={activityItem.id} className="py-4 cursor-pointer" onClick={()=> viewNotification(activityItem)}>
                 <div className="flex space-x-3">
                   <img
                     className="h-6 w-6 rounded-full"
-                    src={activityItem.person.imageUrl}
+                    src={activityItem.get("from").get("profileImg")}
                     alt=""
                   />
                   <div className="flex-1 space-y-1">
                     <div className="flex items-center justify-between">
                       <h3 className="text-sm font-medium">
-                        {activityItem.person.name}
+                        {`${activityItem.get("from").get("firstName")} ${activityItem.get("from").get("lastName")}`}
                       </h3>
-                      <p className="text-sm text-gray-300">
-                        {activityItem.time}
-                      </p>
+                     
                     </div>
                     <p className="text-sm text-gray-300">
-                      Deployed {activityItem.project} ({activityItem.commit} in
-                      master) to {activityItem.environment}
+                     
+                       {activityItem.get("message")}
                     </p>
+                    <p className="text-sm text-gray-300">
+                        {timeAgo.format(activityItem.get("createdAt"))}
+                      </p>
                   </div>
                 </div>
               </li>
@@ -96,6 +111,6 @@ export default function Dashboard() {
           </ul>
         </div>
       </div>
-    </div>
+          </div>
   )
 }

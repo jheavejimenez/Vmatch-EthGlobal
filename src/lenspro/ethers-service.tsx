@@ -31,7 +31,7 @@ export const signText = (text: string) => {
 }
 
 export const getSigner = () => {
-  return ethersProvider.getSigner()
+  return ethersProvider ? ethersProvider.getSigner() : null
 }
 export const signedTypeData = (
   domain: TypedDataDomain,

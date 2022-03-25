@@ -213,7 +213,7 @@ export default function Page() {
                               <span>Message</span>
                             </button>
                             <button
-                              type="button"
+                              type="button" 
                               className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
                               onClick={handleVideoCall}
                             >
@@ -224,7 +224,7 @@ export default function Page() {
                               <span>Video Call</span>
                             </button>
                             <button
-                              type="button"
+                              type="button" 
                               className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
                               onClick={handleMatch}
                             >
@@ -355,14 +355,15 @@ export default function Page() {
                   </div>
                   <div
                     hidden={selectedTab != 'Followers'}
-                    className="mx-auto mt-8 max-w-5xl  px-4 pb-4 sm:px-6 lg:px-8"
+                    className="mx-auto mt-8 max-w-5xl px-4 pb-4 sm:px-6 lg:px-8"
                   >
                     <Followers />
                   </div>
                   <div
                     hidden={selectedTab != 'Following'}
-                    className="mx-auto mt-8 max-w-5xl  px-4 pb-4 sm:px-6 lg:px-8"
+                    className="mx-auto mt-8 max-w-5xl px-4 pb-4 sm:px-6 lg:px-8"
                   >
+                    
                     <Following />
                   </div>
                 </article>

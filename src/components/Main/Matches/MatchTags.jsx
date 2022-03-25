@@ -5,7 +5,8 @@ import { useMoralis } from 'react-moralis'
 import axios from 'axios'
 import { Transition } from '@headlessui/react'
 import { useTimeoutFn } from 'react-use'
-
+import { isFollowing,follow } from '../../../lenspro/lenspro'
+import { sendNotification } from '../Fixed/sendnotifications'
 export default function Example() {
   const router = useRouter()
   const [match, setMatch] = useState(true)
@@ -31,6 +32,8 @@ export default function Example() {
 
   function matchDenied() {
     //not matched, show next
+    
+    
     if (matches.current.length > 0) {
       matches.current.splice(0, 1)
       if (matches.current.length > 0) setCurrentMatch([matches.current[0]])
@@ -40,13 +43,24 @@ export default function Example() {
     resetIsShowing()
   }
 
-  function matchAccepted() {
+  async function matchAccepted() {
+    
     // MATCHED, show next
+    if(currentMatch[0].get("profile")!= undefined)
+    if(!isFollowing(user.get("ethAddress"),currentMatch[0].get("profileId")) )
+    {
+       follow(currentMatch[0].get("profileId"));
+       sendNotification(currentMatch[0].id,"follow","","Followed you.",user,Moralis);
+    }
+
     if (matches.current.length > 0) {
       matches.current.splice(0, 1)
-      if (matches.current.length > 0) setCurrentMatch([matches.current[0]])
+      if (matches.current.length > 0)
+      
+      setCurrentMatch([matches.current[0]])
       else setCurrentMatch([])
     }
+
     setIsShowing(false)
     resetIsShowing()
   }
@@ -101,6 +115,8 @@ export default function Example() {
           videochat.set('to', currentMatch[0])
           videochat.set('live', false)
           videochat.save().then((object) => {
+            sendNotification(currentMatch[0].id,"chat request",object.id,"Sent a video chat request.",user,Moralis);
+   
             router.push(`/videochat/${object.id}`)
           })
         })
@@ -113,6 +129,8 @@ export default function Example() {
       videochat.set('live', false)
 
       videochat.save().then((object) => {
+        sendNotification(currentMatch[0].id,"chat request",object.id,"Sent a video chat request.",user,Moralis);
+   
         router.push(`/videochat/${object.id}`)
       })
     }

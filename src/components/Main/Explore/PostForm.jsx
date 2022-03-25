@@ -3,7 +3,7 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { Fragment, useEffect, useState } from 'react'
 import { useMoralis, useMoralisFile } from 'react-moralis'
 
-const type = [{ name: 'Free' }, { name: 'Pay to View' }]
+//const type = [{ name: 'Free' }, { name: 'Pay to View' }]
 export default function PostForm(props) {
   function closeModal() {
     props.handlePost(false)
@@ -16,6 +16,23 @@ export default function PostForm(props) {
   const [profileHandle, setProfileHandle] = useState()
 
   const [selected, setSelected] = useState()
+  const [type,setType]   = useState([]);
+  const [currency,setCurrency] = useState(new Map());
+  
+  useEffect(()=>{
+   const Currency = Moralis.Object.extend("Currency");
+   const query = new Moralis.Query(Currency);
+   query.ascending("name");
+   query.find().then((results)=>{
+       let r = new Map();
+       results.forEach((result) =>{
+          r[result.get("name")] = result;       
+       })
+      setCurrency(r);
+      setType(results);
+   }) 
+  },[])
+
   useEffect(() => {
     if (user) {
       setProfileHandle(user.get('handle'))
@@ -203,7 +220,7 @@ export default function PostForm(props) {
                                     : 'text-gray-900'
                                 }`
                               }
-                              value={content.name}
+                              value={content.get("name")}
                             >
                               {({ selected }) => (
                                 <>
@@ -212,7 +229,7 @@ export default function PostForm(props) {
                                       selected ? 'font-medium' : 'font-normal'
                                     }`}
                                   >
-                                    {content.name}
+                                    {content.get("name")}
                                   </span>
                                   {selected ? (
                                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
@@ -239,7 +256,7 @@ export default function PostForm(props) {
                 htmlFor="contentPrice"
                 className="block text-sm font-medium text-gray-700"
               >
-                Price in Matic
+                Price
               </label>
               <div className="mt-1">
                 <input
