@@ -14,6 +14,7 @@ import Followers from './Followers'
 import Following from './Following'
 import axios from 'axios'
 import { setWindow } from '../../../lenspro/ethers-service'
+import {getPublications} from '../../../lenspro/getposts'
 
 const tabs = [
   { name: 'Profile', href: '#', current: true },
@@ -26,7 +27,7 @@ const tabs = [
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
-
+ 
 export default function Page() {
   const { user, Moralis } = useMoralis()
 
@@ -40,7 +41,36 @@ export default function Page() {
   //CONTENT
   const [content, setContent] = useState([])
 
-  useEffect(() => {
+ 
+    useEffect(()=>{
+    async function getPost(){
+    const result = await getPublications(user.get("profileId"));
+    console.log(result.publications.items);
+    let r  = [];
+    let count = result.publications.items.length;
+    result.publications.items.forEach(element => {
+
+      if(element.metadata.media.length > 0)
+      {
+          r.push({profileId:element.profile.id,handle:element.profile.handle,name:element.profile.name,
+            title:element.metadata.name,description:element.metadata.description
+            ,file:element.metadata.media[0].original.url,fileType:element.metadata.media[0].original.mimeType, 
+          createdAt:new Date (element.createdAt),id:element.id.replace(element.profile.id+"-","")});
+      }
+      count--;
+      setContent(r)
+     
+      console.log(r)
+    });
+       
+  }
+  if(user)
+   getPost();
+  
+  },[user])
+  
+
+/*  useEffect(() => {
     if (user) {
       const Content = Moralis.Object.extend('Content')
       const query = new Moralis.Query(Content)
@@ -54,7 +84,7 @@ export default function Page() {
       })
     }
   }, [user])
-
+*/
   // LIVE TAB
   const [livepeerStreamObject, setLivepeerStreamObject] = useState()
   const [videoJsOptions, setVideoJsOptions] = useState({
@@ -372,12 +402,12 @@ export default function Page() {
 
                   <div
                     hidden={selectedTab != 'Content'}
-                    className="mx-auto mt-8 max-w-5xl px-4 pb-4 sm:px-6 lg:px-8"
+                    className="mx-auto  mt-8 max-w-5xl px-4 pb-4 sm:px-6 lg:px-8"
                   >
                     <div className="mt-8">
                       <ul
                         role="list"
-                        className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
+                        className="mx-auto grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-8"
                       >
                         {content.map((data, index) => (
                           <li
@@ -433,3 +463,4 @@ export default function Page() {
     </>
   )
 }
+  

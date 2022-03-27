@@ -12,7 +12,7 @@ import { useMoralis } from 'react-moralis'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import { USDCAddress, USDCABI } from '../../../Contracts/USDCContract'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { XIcon } from '@heroicons/react/solid'
 
 export default function Contentpost(props) {
@@ -36,7 +36,7 @@ export default function Contentpost(props) {
       web3Provider.getSigner()
     )
 
-    const tipReceiver = props.data.get('address')
+    const tipReceiver = props.data.address
 
     USDCContract.transfer(
       tipReceiver,
@@ -44,7 +44,6 @@ export default function Contentpost(props) {
       // ethers.utils.parseUnits(tipAmount.toString(), 6)
     ).then((result) => {})
   }
-
   return (
     <div className="mt-36 w-4/12 space-y-6 lg:col-span-2 lg:col-start-1">
       {/* Description list*/}
@@ -62,26 +61,33 @@ export default function Contentpost(props) {
                 id="applicant-information-title"
                 className="flex flex-row text-lg font-medium leading-6 text-gray-900"
               >
-                {props.data.get('handle')}
+                {props.data.handle}
                 <CheckCircleIcon className="ml-1 h-3 text-green-600" />
               </div>
               <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                {timeAgo.format(props.data.get('createdAt'))}
+                {timeAgo.format(props.data.createdAt)}
               </p>
             </div>
           </div>
           <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
             <div className="mb-4">
+             { props.data.fileType.includes("image/") && (
               <img
                 className="h-full w-full object-cover"
-                src={props.data.get('contentFile')}
+                src={props.data.file}
                 alt=""
-              />
+              />)}
+               { props.data.fileType.includes("video/") && (
+              <video
+                className="h-full w-full object-cover"
+                src={props.data.file}
+                alt=""
+              controls/>)}
             </div>
             <div className="sm:col-span-2">
-              <dt className="text-sm font-medium text-gray-500">My Post</dt>
+              <dt className="text-sm font-medium text-gray-500">{props.data.title}</dt>
               <dd className="mt-1 text-sm text-gray-900">
-                {props.data.get('contentDesc')}
+                {props.data.description}
               </dd>
             </div>
           </div>

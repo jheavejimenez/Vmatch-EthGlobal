@@ -88,8 +88,8 @@ export default function ProfileForm(props) {
       console.log(address)
       const profile = await profiles({ ownedBy: [address] })
       console.log(profile.profiles.items)
-      alert('hell2')
-      alert(JSON.stringify(profile.profiles))
+     // alert('hell2')
+      //alert(JSON.stringify(profile.profiles))
       if (profile.profiles.items.length > 0) {
         user.set('profileId', profile.profiles.items[0].id)
         user.save()
@@ -166,18 +166,18 @@ export default function ProfileForm(props) {
     }
 
     if (user.get('profileId') == undefined) {
-      alert('check')
+     // alert('check')
       createProfile(createProfileRequest).then(
         (result) => {
           if (result.data.createProfile.reason == 'HANDLE_TAKEN')
-            alert(JSON.stringify(result))
-          setProfileID(result)
+          //  alert(JSON.stringify(result))
+          //setProfileID(result)
           console.log(result)
-          alert(result)
+          //alert(result)
         },
         (err) => {
           console.log('Error')
-          alert(JSON.stringify(err))
+         // alert(JSON.stringify(err))
         }
       )
     } else {
@@ -185,7 +185,7 @@ export default function ProfileForm(props) {
       console.log('UpdateProfile', result)
     }
 
-    user.set('handle', userName)
+   // user.set('handle', userName)
     user.set('username', userName)
     user.set('userbio', userBio)
     if (ipfsProfile) user.set('profileImg', ipfsProfile)

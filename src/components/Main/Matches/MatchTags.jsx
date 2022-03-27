@@ -56,7 +56,7 @@ export default function Example() {
     )
     if (currentMatch[0].get('profileId') != undefined)
       if (!following) {
-        alert('is not following')
+       // alert('is not following')
         follow(currentMatch[0].get('profileId'), window)
         sendNotification(
           currentMatch[0].id,

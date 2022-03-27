@@ -1,8 +1,16 @@
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import { base64 } from 'ethers/lib/utils'
 import { Fragment, useEffect, useState } from 'react'
 import { useMoralis, useMoralisFile } from 'react-moralis'
-
+import { create } from 'ipfs-http-client';
+import {createPost} from '../../../lenspro/post';
+import { setWindow } from '../../../lenspro/ethers-service'
+const client = create({
+  host: 'ipfs.infura.io',
+  port: 5001,
+  protocol: 'https',
+});
 //const type = [{ name: 'Free' }, { name: 'Pay to View' }]
 export default function PostForm(props) {
   function closeModal() {
@@ -39,6 +47,36 @@ export default function PostForm(props) {
     }
   }, [user])
 
+
+  async function buildMetaData(title,file,fileType,description,fee,amount){
+    let t = new Date().getTime();
+    let id = user.get("profileId")+"-"+t.toString();
+    let utf8Encode = new TextEncoder();
+    
+    const data =JSON.stringify( {
+      version: '1.0.0',
+      metadata_id: id,
+      description: description,
+      content: null,
+      external_url: null,
+      image: user.get("profileImg"),
+      imageMimeType: "image/jpeg",
+      name: title,
+      attributes: [],
+      media: [
+         {
+           item: file,
+           type: fileType,
+         },
+      ],
+      appId: 'VMATCH',
+    });
+
+   const metadata = await client.add(data)
+   console.log(metadata)   
+    return metadata;
+  }
+
   async function posting(e) {
     e.preventDefault()
 
@@ -62,7 +100,14 @@ export default function PostForm(props) {
         }
       )
     }
-
+    var blob = contentFile; // See step 1 above
+    console.log(blob.type)
+    
+    const metadata = await buildMetaData(contentTitle,ipfsContent,contentFile.type,contentDescription,contentType,contentPrice)
+    setWindow(window)
+    console.log(metadata)
+    const result = await createPost(user.get("profileId"),`ipfs://${metadata.path}/`,"");
+    console.log(result);
     const Content = Moralis.Object.extend('Content')
     const content = new Content()
     // int.set('objectId', selectIntId[selectedInt])

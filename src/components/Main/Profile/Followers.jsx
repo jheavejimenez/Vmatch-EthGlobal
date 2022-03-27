@@ -2,6 +2,7 @@
 import { XIcon, VideoCameraIcon } from '@heroicons/react/solid'
 import { useEffect, useState } from 'react'
 import { followersRequest } from '../../../lenspro/followers'
+import { useMoralis } from 'react-moralis'
 import {
   getAddressFromSigner,
   setWindow,
@@ -9,6 +10,14 @@ import {
 
 export default function Followers() {
   const [followersArray, setFollowersArray] = useState([])
+  const {Moralis} =useMoralis()
+  async function getProfilePic(id)
+  {
+      const result = await Moralis.Cloud.run("getProfilePic",{id:id});
+      console.log(result)
+      
+      return result;
+  }
 
   useEffect(() => {
     async function seeFollowers() {
@@ -18,14 +27,17 @@ export default function Followers() {
       let r = []
       console.log(results)
 
-      results.data.following.items.forEach((result) => {
+      results.data.following.items.forEach(async (result) => {
+        const url =await getProfilePic(result.profile.id)
         r.push({
           name: result.profile.name,
           id: result.profile.id,
           location: result.profile.location,
+          profileImg:url
         })
       })
       setFollowersArray(r)
+      console.log(r)
     }
     seeFollowers()
   }, [])
@@ -42,7 +54,7 @@ export default function Followers() {
           <div className="flex flex-1 flex-col p-8">
             <img
               className="mx-auto h-32 w-32 flex-shrink-0 rounded-full"
-              src={person.imageUrl}
+              src={person.profileImg}
               alt=""
             />
             <h3 className="mt-6 text-sm font-medium text-gray-900">

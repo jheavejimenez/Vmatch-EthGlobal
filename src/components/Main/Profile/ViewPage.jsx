@@ -13,6 +13,8 @@ import ContentProfile from './ContentProfile'
 import Followers from './Followers'
 import Following from './Following'
 
+import { setWindow } from '../../../lenspro/ethers-service'
+import {getPublications} from '../../../lenspro/getposts'
 const tabs = [
   { name: 'Profile', href: '#', current: true },
   { name: 'Content', href: '#', current: false },
@@ -65,7 +67,7 @@ export default function ViewPage() {
   //CONTENT
   const [content, setContent] = useState([])
 
-  useEffect(() => {
+/*  useEffect(() => {
     if (user) {
       const Content = Moralis.Object.extend('Content')
       const query = new Moralis.Query(Content)
@@ -79,6 +81,34 @@ export default function ViewPage() {
       })
     }
   }, [user])
+*/
+useEffect(()=>{
+  async function getPost(){
+  const result = await getPublications(userProfile.get("profileId"));
+  console.log(result.publications.items);
+  let r  = [];
+  let count = result.publications.items.length;
+  result.publications.items.forEach(element => {
+
+    if(element.metadata.media.length > 0)
+    {
+        r.push({profileId:element.profile.id,handle:element.profile.handle,name:element.profile.name,
+          title:element.metadata.name,description:element.metadata.description
+          ,file:element.metadata.media[0].original.url,fileType:element.metadata.media[0].original.mimeType, 
+        createdAt:new Date (element.createdAt),id:element.id.replace(element.profile.id+"-","")});
+    }
+    count--;
+    setContent(r)
+   
+    console.log(r)
+  });
+     
+}
+if(user && userProfile)
+ getPost();
+
+},[user,userProfile])
+
 
   // LIVE TAB
   const [livepeerStreamObject, setLivepeerStreamObject] = useState()
