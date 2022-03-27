@@ -73,7 +73,7 @@ export default function Hero() {
               <div className="mx-auto max-w-md px-8 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
                 <img
                   className="w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                  src="vmatch-rough-2.png"
+                  src="vmatch-hero-2.png"
                   alt=""
                 />
               </div>
