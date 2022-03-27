@@ -10,14 +10,13 @@ import {
 
 export default function Followers() {
   const [followersArray, setFollowersArray] = useState([])
-  const {Moralis} =useMoralis()
-  async function getProfilePic(id)
-  {
-      const result = await Moralis.Cloud.run("getProfilePic",{id:id});
-      console.log(result)
-      
-      return result;
-  }
+  const { Moralis } = useMoralis()
+  // async function getProfilePic(id) {
+  //   const result = await Moralis.Cloud.run('getProfilePic', { id: id })
+  //   console.log(result)
+
+  //   return result
+  // }
 
   useEffect(() => {
     async function seeFollowers() {
@@ -28,12 +27,12 @@ export default function Followers() {
       console.log(results)
 
       results.data.following.items.forEach(async (result) => {
-        const url =await getProfilePic(result.profile.id)
+        // const url = await getProfilePic(result.profile.id)
         r.push({
           name: result.profile.name,
           id: result.profile.id,
           location: result.profile.location,
-          profileImg:url
+          profileImg: '/catfish.jpeg',
         })
       })
       setFollowersArray(r)

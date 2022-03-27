@@ -16,7 +16,6 @@ const navigation = [
     name: 'Matching',
     icon: UsersIcon,
     href: '/matching',
-    count: '!',
     current: false,
   },
   // {
@@ -26,7 +25,7 @@ const navigation = [
   //   current: true,
   // },
   { name: 'Profile', icon: UserIcon, href: '/profile', current: false },
-  { name: 'Messages', icon: InboxIcon, href: '/messages', current: false },
+  // { name: 'Messages', icon: InboxIcon, href: '/messages', current: false },
   {
     name: 'Revenue',
     icon: CurrencyDollarIcon,

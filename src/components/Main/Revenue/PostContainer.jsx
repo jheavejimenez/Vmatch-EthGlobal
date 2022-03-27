@@ -27,12 +27,12 @@ export default function PostContainer(props) {
           <div className="text-sm">{props.data.get('contentDesc')}</div>
         </div>
         <CashIcon onClick={deleteMessage} className="h-5 text-green-500" />
-        <NumberFormat
+        {/* <NumberFormat
           value={20}
           displayType={'text'}
           thousandSeparator={true}
           prefix={'MATIC '}
-        />{' '}
+        />{' '} */}
       </div>
     </div>
   )

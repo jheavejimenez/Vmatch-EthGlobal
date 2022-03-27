@@ -14,20 +14,20 @@ import Followers from './Followers'
 import Following from './Following'
 import axios from 'axios'
 import { setWindow } from '../../../lenspro/ethers-service'
-import {getPublications} from '../../../lenspro/getposts'
+import { getPublications } from '../../../lenspro/getposts'
 
 const tabs = [
   { name: 'Profile', href: '#', current: true },
   { name: 'Content', href: '#', current: false },
   { name: 'Live', href: '#', current: false },
   { name: 'Following', href: '#', current: false },
-  { name: 'Followers', href: '#', current: false },
+  // { name: 'Followers', href: '#', current: false },
 ]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
- 
+
 export default function Page() {
   const { user, Moralis } = useMoralis()
 
@@ -41,36 +41,36 @@ export default function Page() {
   //CONTENT
   const [content, setContent] = useState([])
 
- 
-    useEffect(()=>{
-    async function getPost(){
-    const result = await getPublications(user.get("profileId"));
-    console.log(result.publications.items);
-    let r  = [];
-    let count = result.publications.items.length;
-    result.publications.items.forEach(element => {
+  useEffect(() => {
+    async function getPost() {
+      const result = await getPublications(user.get('profileId'))
+      console.log(result.publications.items)
+      let r = []
+      let count = result.publications.items.length
+      result.publications.items.forEach((element) => {
+        if (element.metadata.media.length > 0) {
+          r.push({
+            profileId: element.profile.id,
+            handle: element.profile.handle,
+            name: element.profile.name,
+            title: element.metadata.name,
+            description: element.metadata.description,
+            file: element.metadata.media[0].original.url,
+            fileType: element.metadata.media[0].original.mimeType,
+            createdAt: new Date(element.createdAt),
+            id: element.id.replace(element.profile.id + '-', ''),
+          })
+        }
+        count--
+        setContent(r)
 
-      if(element.metadata.media.length > 0)
-      {
-          r.push({profileId:element.profile.id,handle:element.profile.handle,name:element.profile.name,
-            title:element.metadata.name,description:element.metadata.description
-            ,file:element.metadata.media[0].original.url,fileType:element.metadata.media[0].original.mimeType, 
-          createdAt:new Date (element.createdAt),id:element.id.replace(element.profile.id+"-","")});
-      }
-      count--;
-      setContent(r)
-     
-      console.log(r)
-    });
-       
-  }
-  if(user)
-   getPost();
-  
-  },[user])
-  
+        console.log(r)
+      })
+    }
+    if (user) getPost()
+  }, [user])
 
-/*  useEffect(() => {
+  /*  useEffect(() => {
     if (user) {
       const Content = Moralis.Object.extend('Content')
       const query = new Moralis.Query(Content)
@@ -442,12 +442,12 @@ export default function Page() {
                       <span>Like</span>
                     </button>
                   </div>
-                  <div
+                  {/* <div
                     hidden={selectedTab != 'Followers'}
                     className="mx-auto mt-8 max-w-5xl px-4 pb-4 sm:px-6 lg:px-8"
                   >
                     <Followers />
-                  </div>
+                  </div> */}
                   <div
                     hidden={selectedTab != 'Following'}
                     className="mx-auto mt-8 max-w-5xl px-4 pb-4 sm:px-6 lg:px-8"
@@ -463,4 +463,3 @@ export default function Page() {
     </>
   )
 }
-  
